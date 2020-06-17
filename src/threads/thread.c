@@ -512,12 +512,9 @@ init_thread (struct thread *t, const char *name, int priority)
   t->status = THREAD_BLOCKED;
   strlcpy (t->name, name, sizeof t->name);
   t->stack = (uint8_t *) t + PGSIZE;
-  t->origin_priority = t->priority = priority;
   t->magic = THREAD_MAGIC;
   t->tick_wait = 0;
   t->tick_start = 0;
-  t->tick_yield = timer_ticks();
-  t->is_donated = false;
   list_init(&t->lock_list);
   t->lock_to_try = NULL;
 
@@ -554,7 +551,6 @@ next_thread_to_run(void)
 	else
 	{
 		struct thread* t = list_entry(list_pop_front(&ready_list), struct thread, elem);
-		t->tick_yield = timer_ticks();
 		return t;
 	}
 }
@@ -656,19 +652,7 @@ bool thread_priority_larger(const struct list_elem* a_, const struct list_elem* 
 	const struct thread* ta = list_entry(a_, struct thread, elem);
 	const struct thread* tb = list_entry(b_, struct thread, elem);
 
-	if (ta->priority > tb->priority)
-	{
-		return true;
-	}
-	else if (ta->priority == tb->priority)
-	{
-		if (ta->tick_yield < tb->tick_yield)
-		{
-			return true;
-		}
-	}
-
-	return false;
+	return ta->priority > tb->priority;
 }
 
 void thread_sleep(int start, int ticks)
