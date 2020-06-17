@@ -273,7 +273,7 @@ void lock_donation_rollback(struct lock* lock)
 
 			if (t->priority > curr->priority)
 			{
-				priority_depth--;
+				curr->priority_depth = (--curr->priority_depth) > 0 ? curr_priority_depth : 0;
 				curr->priority = t->priority;
 			}
 		}
