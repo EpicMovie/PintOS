@@ -196,6 +196,7 @@ void lock_donation(struct lock* target_lock)
 		if (lock_owner->priority < curr->priority)
 		{
 			lock_owner->priority = curr->priority;
+			lock_owner->is_donated = true;
 
 			if (lock_owner->lock_to_try != NULL)
 			{
@@ -278,6 +279,11 @@ void lock_donation_rollback(struct lock* lock)
 	else
 	{
 		curr->priority = curr->origin_priority;
+	}
+
+	if (curr->priority == curr->origin_priority)
+	{
+		curr->is_donated = false;
 	}
 }
 
