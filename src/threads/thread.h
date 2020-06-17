@@ -105,6 +105,7 @@ struct thread
     struct list lock_list;
     struct thread* lock_to_try;
     bool is_donated;
+    int priority_depth;
     
     int tick_start;
     int tick_wait;
