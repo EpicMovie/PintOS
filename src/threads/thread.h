@@ -101,11 +101,14 @@ struct thread
     /* Owned by thread.c. */
     unsigned magic;                     /* Detects stack overflow. */
 
-	int priority_donation_depth;
-       	
-	bool is_timer_sleep;
+	int origin_priority;
+	bool is_donated;
+	struct list lock_list;
+	struct thread* lock_to_try;
+
 	int tick_wait;
-	int tick_start;	
+	int tick_start;
+	int tick_yield;
   };
 
 /* If false (default), use round-robin scheduler.
@@ -144,11 +147,9 @@ void thread_set_nice (int);
 int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
 
-bool thread_priority_less(const struct thread* a_, const struct thread* b_, void* aux UNUSED);
+bool thread_priority_larger(const struct list_elem* a_, const struct list_elem* b_, void* aux UNUSED);
 
 void thread_sleep(int start, int ticks);
 void thread_wake_up(void);
-
-void thread_ready_to_block(struct thread* t);
 
 #endif /* threads/thread.h */
