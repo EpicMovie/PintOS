@@ -300,7 +300,7 @@ lock_release (struct lock *lock)
   ASSERT (lock_held_by_current_thread (lock));
 
   list_remove(&lock->elem);
-  lock_donation_rollback(lock)
+  lock_donation_rollback(lock);
 
   lock->holder = NULL;
   sema_up (&lock->semaphore);
