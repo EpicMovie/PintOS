@@ -510,6 +510,7 @@ init_thread (struct thread *t, const char *name, int priority)
   t->tick_start = 0;
   list_init(&t->lock_list);
   t->lock_to_try = NULL;
+  t->priority_depth = 0;
 
   list_push_back (&all_list, &t->allelem);
 }
