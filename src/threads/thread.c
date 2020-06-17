@@ -380,23 +380,13 @@ int thread_clamp_priority(int new_priority)
 void
 thread_set_priority (int new_priority) 
 {
-	if (thread_current()->is_donated)
+	if(!list_empty(&ready_list))
 	{
-		thread_current()->origin_priority = new_priority;
-	}
-	else
-	{
-		thread_current()->priority = new_priority;
-		thread_current()->origin_priority = new_priority;
+		struct thread* t = list_entry(list_front(&ready_list), struct thread, elem);	
 		
-		if (!list_empty(&ready_list))
+		if(t->priority > new_priority)
 		{
-			struct thread* t = list_entry(list_front(&ready_list), struct thread, elem);
-
-			if (t->priority > new_priority)
-			{
-				thread_yield();
-			}
+			thread_yield();	
 		}
 	}
 }
