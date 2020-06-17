@@ -360,22 +360,6 @@ thread_foreach (thread_action_func *func, void *aux)
     }
 }
 
-int thread_clamp_priority(int new_priority)
-{
-	if (new_priority < PRI_MIN)
-	{
-		return PRI_MIN;
-	}
-	else if (new_priority > PRI_MAX)
-	{
-		return PRI_MAX;
-	}
-	else
-	{
-		return new_priority;
-	}
-}
-
 /* Sets the current thread's priority to NEW_PRIORITY. */
 void
 thread_set_priority (int new_priority) 
@@ -512,6 +496,8 @@ init_thread (struct thread *t, const char *name, int priority)
   t->status = THREAD_BLOCKED;
   strlcpy (t->name, name, sizeof t->name);
   t->stack = (uint8_t *) t + PGSIZE;
+  t->priority = priority;
+  t->origin_priority = priority;
   t->magic = THREAD_MAGIC;
   t->tick_wait = 0;
   t->tick_start = 0;
