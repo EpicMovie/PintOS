@@ -101,14 +101,8 @@ struct thread
     /* Owned by thread.c. */
     unsigned magic;                     /* Detects stack overflow. */
 
-	int origin_priority;
-	bool is_donated;
-	struct list lock_list;
-	struct thread* lock_to_try;
-
-	int tick_wait;
-	int tick_start;
-	int tick_yield;
+    struct list lock_list;
+    struct thread* lock_to_try;
   };
 
 /* If false (default), use round-robin scheduler.
