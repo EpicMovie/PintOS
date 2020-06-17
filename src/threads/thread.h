@@ -103,6 +103,9 @@ struct thread
 
     struct list lock_list;
     struct thread* lock_to_try;
+    
+    int tick_start;
+    int tick_wait;
   };
 
 /* If false (default), use round-robin scheduler.
