@@ -66,10 +66,9 @@ sema_down (struct semaphore *sema)
   ASSERT (!intr_context ());
 
   old_level = intr_disable ();
-  while (sema->value == 0) 
+    while (sema->value == 0) 
     {
-      list_push_back (&sema->waiters, &thread_current ()->elem);
-      list_sort(&sema->waiters, thread_priority_less, NULL);
+	  list_push_back(&sema->waiters, &thread_current()->elem);
       thread_block ();
     }
   sema->value--;
@@ -114,11 +113,16 @@ sema_up (struct semaphore *sema)
   ASSERT (sema != NULL);
 
   old_level = intr_disable ();
-  if (!list_empty (&sema->waiters)) 
-    thread_unblock (list_entry (list_pop_front (&sema->waiters),
-                                struct thread, elem));
+  if (!list_empty(&sema->waiters))
+  {
+	  list_sort(&sema->waiters, thread_priority_larger, NULL);
+	  thread_unblock(list_entry(list_pop_front(&sema->waiters),
+		  struct thread, elem));
+  }
   sema->value++;
   intr_set_level (old_level);
+
+  thread_yield();
 }
 
 static void sema_test_helper (void *sema_);
@@ -182,6 +186,27 @@ lock_init (struct lock *lock)
   sema_init (&lock->semaphore, 1);
 }
 
+void lock_donation(struct lock* target_lock)
+{
+	if (target_lock->holder != NULL)
+	{
+		struct thread* lock_owner = target_lock->holder;
+		struct thread* curr = thread_current();
+
+		if (lock_owner->priority < curr->priority)
+		{
+			lock_owner->priority = curr->priority;
+			lock_owner->is_donated = true;
+
+			if (lock_owner->lock_to_try != NULL)
+			{
+				lock_donation(lock_owner->lock_to_try);
+			}
+		}
+	}
+}
+
+
 /* Acquires LOCK, sleeping until it becomes available if
    necessary.  The lock must not already be held by the current
    thread.
@@ -193,23 +218,22 @@ lock_init (struct lock *lock)
 void
 lock_acquire (struct lock *lock)
 {
+  ASSERT (lock != NULL);
+  ASSERT (!intr_context ());
+  ASSERT (!lock_held_by_current_thread(lock));
+  
+  struct thread* current_thread = thread_current();
+  current_thread->lock_to_try = lock;
 
-	  ASSERT (lock != NULL);
-	    ASSERT (!intr_context ());
-	      ASSERT (!lock_held_by_current_thread (lock));
+  lock_donation(lock);
 
-		 
-	       if (lock->holder && lock->holder->priority < thread_current()->priority)
-		        {
-			       	  lock->holder->status = THREAD_BLOCKED;
-				  list_push_back(&lock->semaphore.waiters, &lock->holder->elem);
-				  lock->semaphore.value++;
-			  }
+  sema_down(&lock->semaphore);
+  lock->holder = current_thread;
+  
+  list_push_back(&current_thread->lock_list, &lock->elem);
+  current_thread->lock_to_try = NULL;
 
-  sema_down (&lock->semaphore);
-  lock->holder = thread_current ();  
-
-
+  thread_yield();
 }
 
 /* Tries to acquires LOCK and returns true if successful or false
@@ -232,6 +256,38 @@ lock_try_acquire (struct lock *lock)
   return success;
 }
 
+void lock_donation_rollback(struct lock* lock)
+{
+	struct thread* curr = thread_current();
+
+	if (!list_empty(&curr->lock_list))
+	{
+		struct list_elem *e;
+		curr->priority = curr->origin_priority;
+
+		for (e = list_begin(&curr->lock_list); e != list_end(&curr->lock_list); e = list_next(e))
+		{
+			struct semaphore sema_ = list_entry(e, struct lock, elem)->semaphore;
+			struct thread* t = list_entry(list_front(&sema_.waiters), struct thread, elem);
+
+			if (t->priority > curr->priority)
+			{
+				curr->priority = t->priority;
+			}
+		}
+	}
+	else
+	{
+		curr->priority = curr->origin_priority;
+	}
+
+	if (curr->priority == curr->origin_priority)
+	{
+		curr->is_donated = false;
+	}
+}
+
+
 /* Releases LOCK, which must be owned by the current thread.
 
    An interrupt handler cannot acquire a lock, so it does not
@@ -243,25 +299,13 @@ lock_release (struct lock *lock)
   ASSERT (lock != NULL);
   ASSERT (lock_held_by_current_thread (lock));
 
+  list_remove(&lock->elem);
+  lock_donation_rollback(lock)
 
-    struct thread* t;
+  lock->holder = NULL;
+  sema_up (&lock->semaphore);
 
-enum intr_level old_level = intr_disable();
-
-							    	 
-  if (!list_empty(&lock->semaphore.waiters))
-	    {
-	
-	  t = list_entry(list_pop_front(&lock->semaphore.waiters), struct thread, elem);
-
-	  thread_unblock(t);	  
-	    }
-						    	  
-							      lock->semaphore.value++;
-							        intr_set_level(old_level);
-
-								  lock->holder = t != NULL ? t : NULL;
-
+  thread_yield();
 }
 
 /* Returns true if the current thread holds LOCK, false
@@ -324,7 +368,7 @@ cond_wait (struct condition *cond, struct lock *lock)
   ASSERT (lock_held_by_current_thread (lock));
   
   sema_init (&waiter.semaphore, 0);
-  list_push_back (&cond->waiters, &waiter.elem);
+  list_push_back(&cond->waiters, &waiter.elem);
   lock_release (lock);
   sema_down (&waiter.semaphore);
   lock_acquire (lock);
@@ -345,9 +389,12 @@ cond_signal (struct condition *cond, struct lock *lock UNUSED)
   ASSERT (!intr_context ());
   ASSERT (lock_held_by_current_thread (lock));
 
-  if (!list_empty (&cond->waiters)) 
-    sema_up (&list_entry (list_pop_front (&cond->waiters),
-                          struct semaphore_elem, elem)->semaphore);
+  if (!list_empty(&cond->waiters))
+  {
+	  list_sort(&cond->waiters, condvar_priority_larger, NULL);
+	  sema_up(&list_entry(list_pop_front(&cond->waiters),
+		  struct semaphore_elem, elem)->semaphore);
+  }
 }
 
 /* Wakes up all threads, if any, waiting on COND (protected by
@@ -364,4 +411,22 @@ cond_broadcast (struct condition *cond, struct lock *lock)
 
   while (!list_empty (&cond->waiters))
     cond_signal (cond, lock);
+}
+
+/* Returns true if value A is less than value B, false
+   otherwise. */
+bool condvar_priority_larger(const struct list_elem* a_, const struct list_elem* b_, void* aux UNUSED)
+{
+	const struct semaphore_elem* sa = list_entry(a_, struct semaphore_elem, elem);
+	const struct semaphore_elem* sb = list_entry(b_, struct semaphore_elem, elem);
+
+	if (!list_empty(&sa->semaphore.waiters) && !list_empty(&sb->semaphore.waiters))
+	{
+		struct thread* ta = list_entry(list_front(&sa->semaphore.waiters), struct thread, elem);
+		struct thread* tb = list_entry(list_front(&sb->semaphore.waiters), struct thread, elem);
+
+		return ta->priority > tb->priority;
+	}
+
+	return true;
 }
