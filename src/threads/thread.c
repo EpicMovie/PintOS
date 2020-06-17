@@ -671,6 +671,4 @@ void thread_wake_up(void)
 			e = list_next(e);
 		}
 	}
-
-	thread_yield();
 }
