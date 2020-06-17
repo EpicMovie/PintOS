@@ -7,10 +7,8 @@
 #include "threads/interrupt.h"
 #include "threads/synch.h"
 #include "threads/thread.h"
-
+  
 /* See [8254] for hardware details of the 8254 timer chip. */
-
-struct lock sleep_lock;
 
 #if TIMER_FREQ < 19
 #error 8254 timer requires TIMER_FREQ >= 19
@@ -39,8 +37,6 @@ timer_init (void)
 {
   pit_configure_channel (0, 2, TIMER_FREQ);
   intr_register_ext (0x20, timer_interrupt, "8254 Timer");
-
-  lock_init(&sleep_lock);
 }
 
 /* Calibrates loops_per_tick, used to implement brief delays. */
@@ -95,9 +91,9 @@ timer_sleep (int64_t ticks)
 {
   int64_t start = timer_ticks ();
 
-    ASSERT (intr_get_level () == INTR_ON);
-      while (timer_elapsed (start) < ticks) 
-	          thread_yield ();
+  ASSERT (intr_get_level () == INTR_ON);
+
+  thread_sleep(start, ticks);
 }
 
 /* Sleeps for approximately MS milliseconds.  Interrupts must be
@@ -176,7 +172,6 @@ timer_interrupt (struct intr_frame *args UNUSED)
 {
   ticks++;
   thread_tick ();
-
   thread_wake_up();
 }
 
@@ -250,16 +245,3 @@ real_time_delay (int64_t num, int32_t denom)
   ASSERT (denom % 1000 == 0);
   busy_wait (loops_per_tick * num / 1000 * TIMER_FREQ / (denom / 1000)); 
 }
-
-void timer_thread_sleep(int start, int ticks)
-{
-	struct thread* current_thread = thread_current();
-
-	current_thread->tick_start = start;
-	current_thread->tick_wait = ticks;
-	current_thread->is_timer_sleep = true;
-
-	thread_block();
-}
-
-
