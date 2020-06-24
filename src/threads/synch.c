@@ -233,8 +233,6 @@ lock_acquire (struct lock *lock)
   
   list_push_back(&current_thread->lock_list, &lock->elem);
   current_thread->lock_to_try = NULL;
-
-  thread_yield();
 }
 
 /* Tries to acquires LOCK and returns true if successful or false
@@ -306,8 +304,6 @@ lock_release (struct lock *lock)
 
   lock->holder = NULL;
   sema_up (&lock->semaphore);
-
-  thread_yield();
 }
 
 /* Returns true if the current thread holds LOCK, false
