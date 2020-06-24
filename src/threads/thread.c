@@ -214,7 +214,6 @@ thread_create (const char *name, int priority,
   /* Add to run queue. */
   thread_unblock (t);
 
-  // 생성된 스레드의 우선순위가 현재 스레드보다 크다면 CPU를 양보해야 한다.
   if (priority > thread_get_priority())
   {
 	  thread_yield();
