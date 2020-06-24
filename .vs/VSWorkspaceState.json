@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src"
+    "\\src",
+    "\\src\\threads"
   ],
-  "SelectedNode": "\\src\\.gitignore",
+  "SelectedNode": "\\src\\threads\\thread.h",
   "PreviewInSolutionExplorer": false
 }
