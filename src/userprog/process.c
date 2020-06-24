@@ -18,8 +18,21 @@
 #include "threads/thread.h"
 #include "threads/vaddr.h"
 
+#define NUM_MAX_ARGS 100;
+#define WORD_SIZE 4;
+
 static thread_func start_process NO_RETURN;
 static bool load (const char *cmdline, void (**eip) (void), void **esp);
+
+char* get_file_name(const char* file_name_args)
+{
+    char* str;
+    char* dummy;
+
+    strlcpy(str, file_name_args, strlen(file_name_args));
+
+    return strtok_r(str, " ", &dummy);
+}
 
 /* Starts a new thread running a user program loaded from
    FILENAME.  The new thread may be scheduled (and may even exit)
@@ -39,7 +52,8 @@ process_execute (const char *file_name)
   strlcpy (fn_copy, file_name, PGSIZE);
 
   /* Create a new thread to execute FILE_NAME. */
-  tid = thread_create (file_name, PRI_DEFAULT, start_process, fn_copy);
+  // Make thread with filename without argument
+  tid = thread_create (get_file_name(file_name), PRI_DEFAULT, start_process, fn_copy);
   if (tid == TID_ERROR)
     palloc_free_page (fn_copy); 
   return tid;
@@ -215,6 +229,8 @@ load (const char *file_name, void (**eip) (void), void **esp)
   bool success = false;
   int i;
 
+  char* file_name_no_args = get_file_name(file_name);
+
   /* Allocate and activate page directory. */
   t->pagedir = pagedir_create ();
   if (t->pagedir == NULL) 
@@ -222,10 +238,10 @@ load (const char *file_name, void (**eip) (void), void **esp)
   process_activate ();
 
   /* Open executable file. */
-  file = filesys_open (file_name);
+  file = filesys_open (file_name_no_args);
   if (file == NULL) 
     {
-      printf ("load: %s: open failed\n", file_name);
+      printf ("load: %s: open failed\n", file_name_no_args);
       goto done; 
     }
 
@@ -238,7 +254,7 @@ load (const char *file_name, void (**eip) (void), void **esp)
       || ehdr.e_phentsize != sizeof (struct Elf32_Phdr)
       || ehdr.e_phnum > 1024) 
     {
-      printf ("load: %s: error loading executable\n", file_name);
+      printf ("load: %s: error loading executable\n", file_name_no_args);
       goto done; 
     }
 
@@ -424,10 +440,45 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
   return true;
 }
 
+void set_esp(void** esp, char* file_name)
+{
+    int user_addr = PHYS_BASE;
+
+    char* args[NUM_MAX_ARGS];
+
+    char* file_name_no_args;
+    char* token, * save_ptr;
+    
+    int num = 0;
+
+    for (token = strtok_r(file_name, " ", &save_ptr); token != NULL;
+        token = strtok_r(NULL, " ", &save_ptr))
+    {
+        ASSERT(num > NUM_MAX_ARGS);
+        args[num++] = token;
+    }
+
+    for (int i = num - 1; i >= 0; i--)
+    {
+        int size = strlen(args[i]);
+        int num_word = size % WORD_SIZE;
+        
+        char* dest = user_addr - num_word * WORD_SIZE;
+
+        memcpy((void*)dest, (void*)args[i], size);
+
+        user_addr -= num_word * WORD_SIZE;
+    }
+
+    *esp = user_addr;
+
+	hex_dump(user_addr, user_addr, PHYS_BASE - user_addr, true);
+}
+
 /* Create a minimal stack by mapping a zeroed page at the top of
    user virtual memory. */
 static bool
-setup_stack (void **esp) 
+setup_stack (void **esp, char* file_name) 
 {
   uint8_t *kpage;
   bool success = false;
@@ -437,10 +488,13 @@ setup_stack (void **esp)
     {
       success = install_page (((uint8_t *) PHYS_BASE) - PGSIZE, kpage, true);
       if (success)
-        // *esp = PHYS_BASE;
-        *esp = PHYS_BASE - 12;
+      {
+          set_esp(esp, file_name);
+      }
       else
-        palloc_free_page (kpage);
+      {
+          palloc_free_page(kpage);
+      }
     }
   return success;
 }
