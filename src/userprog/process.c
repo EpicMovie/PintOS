@@ -457,7 +457,9 @@ void set_esp(void** esp, char* file_name)
         args[num++] = token;
     }
 
-    for (int i = num - 1; i >= 0; i--)
+    int i;
+
+    for (i = num - 1; i >= 0; i--)
     {
         int size = strlen(args[i]);
         int num_word = size % WORD_SIZE;
