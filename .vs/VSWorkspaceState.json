@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src",
-    "\\src\\userprog"
+    "\\src"
   ],
-  "SelectedNode": "\\src\\userprog\\process.c",
+  "SelectedNode": "\\src\\.gitignore",
   "PreviewInSolutionExplorer": false
 }
