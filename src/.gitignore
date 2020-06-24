@@ -2,4 +2,6 @@ cscope.files
 cscope.out
 TAGS
 tags
-.vs
+
+.vs/
+CppProperties.json
