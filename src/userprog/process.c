@@ -18,7 +18,6 @@
 #include "threads/thread.h"
 #include "threads/vaddr.h"
 
-#define NUM_MAX_ARGS 100;
 #define WORD_SIZE 4;
 
 static thread_func start_process NO_RETURN;
@@ -444,7 +443,7 @@ void set_esp(void** esp, char* file_name)
 {
     int user_addr = PHYS_BASE;
 
-    char* args[NUM_MAX_ARGS];
+    char* args[100];
 
     char* file_name_no_args;
     char* token, * save_ptr;
@@ -454,7 +453,7 @@ void set_esp(void** esp, char* file_name)
     for (token = strtok_r(file_name, " ", &save_ptr); token != NULL;
         token = strtok_r(NULL, " ", &save_ptr))
     {
-        ASSERT(num > NUM_MAX_ARGS);
+        ASSERT(num > 100);
         args[num++] = token;
     }
 
