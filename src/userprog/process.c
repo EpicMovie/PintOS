@@ -25,10 +25,12 @@ static bool load (const char *cmdline, void (**eip) (void), void **esp);
 
 char* get_file_name(const char* file_name_args)
 {
-    char* str;
+    int len = strlen(file_name_args);
+
+    char str[len];
     char* dummy;
 
-    strlcpy(str, file_name_args, strlen(file_name_args));
+    strlcpy(str, file_name_args, len);
 
     return strtok_r(str, " ", &dummy);
 }
