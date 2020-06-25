@@ -137,11 +137,6 @@ process_activate (void)
 {
   struct thread *t = thread_current ();
 
-  if (init_page_dir == NULL)
-  {
-      return;
-  }
-
   /* Activate thread's page tables. */
   pagedir_activate (t->pagedir);
 
