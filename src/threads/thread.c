@@ -34,8 +34,6 @@ static struct list all_list;
 /* Idle thread. */
 static struct thread *idle_thread;
 
-static bool is_initial_thread_initialized = false;
-
 /* Initial thread, the thread running init.c:main(). */
 static struct thread *initial_thread;
 
@@ -105,8 +103,6 @@ thread_init (void)
   init_thread (initial_thread, "main", PRI_DEFAULT);
   initial_thread->status = THREAD_RUNNING;
   initial_thread->tid = allocate_tid ();
-
-  is_initial_thread_initialized = true;
 }
 
 /* Starts preemptive thread scheduling by enabling interrupts.
@@ -325,11 +321,6 @@ thread_exit (void)
 void
 thread_yield (void) 
 {
-  if (!is_initial_thread_initialized)
-  {
-    return;
-  }
-
   struct thread *cur = thread_current ();
   enum intr_level old_level;
   
