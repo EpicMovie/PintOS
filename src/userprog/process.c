@@ -28,11 +28,11 @@ void* get_file_name(const char* file_name, char* file_name_args)
     char* str;
     char* dummy;
 
-    strlcpy(str, file_name_args, strlen(file_name);
+    strlcpy(str, file_name_args, strlen(file_name));
 
-    char* str = strtok_r(str, " ", &dummy)
+    str = strtok_r(str, " ", &dummy);
 
-    memcpy(file_name_args, str, strlen(str);
+    memcpy(file_name_args, str, strlen(str));
 }
 
 /* Starts a new thread running a user program loaded from
@@ -53,7 +53,7 @@ process_execute (const char *file_name)
   strlcpy (fn_copy, file_name, PGSIZE);
 
   char* file_name_no_args;
-  get_file_name(file_name, file_name_no_args)
+  get_file_name(file_name, file_name_no_args);
 
   /* Create a new thread to execute FILE_NAME. */
   // Make thread with filename without argument
