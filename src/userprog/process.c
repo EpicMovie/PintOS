@@ -20,19 +20,21 @@
 
 #define WORD_SIZE 4;
 
+#define ARGS_SIZE 100;
+
 static thread_func start_process NO_RETURN;
 static bool load (const char *cmdline, void (**eip) (void), void **esp);
 
 void* get_file_name(const char* file_name, char* file_name_args)
 {
-    char* str;
+    char str[100];
     char* dummy;
 
-    strlcpy(str, file_name_args, strlen(file_name));
+    strlcpy(str, file_name, strlen(file_name));
 
-    str = strtok_r(str, " ", &dummy);
+    dummy = strtok_r(str, " ", &dummy);
 
-    memcpy(file_name_args, str, strlen(str));
+    memcpy(file_name_args, dummy, strlen(dummy));
 }
 
 /* Starts a new thread running a user program loaded from
@@ -52,7 +54,7 @@ process_execute (const char *file_name)
     return TID_ERROR;
   strlcpy (fn_copy, file_name, PGSIZE);
 
-  char* file_name_no_args;
+  char file_name_no_args[100];
   get_file_name(file_name, file_name_no_args);
 
   /* Create a new thread to execute FILE_NAME. */
@@ -236,7 +238,7 @@ load (const char *file_name, void (**eip) (void), void **esp)
   bool success = false;
   int i;
 
-  char* file_name_no_args;
+  char file_name_no_args[100];
   get_file_name(file_name, file_name_no_args);
 
   /* Allocate and activate page directory. */
