@@ -23,16 +23,16 @@
 static thread_func start_process NO_RETURN;
 static bool load (const char *cmdline, void (**eip) (void), void **esp);
 
-char* get_file_name(const char* file_name_args)
+void* get_file_name(const char* file_name, char* file_name_args)
 {
-    int len = strlen(file_name_args);
-
-    char str[len];
+    char* str;
     char* dummy;
 
-    strlcpy(str, file_name_args, len);
+    strlcpy(str, file_name_args, strlen(file_name);
 
-    return strtok_r(str, " ", &dummy);
+    char* str = strtok_r(str, " ", &dummy)
+
+    memcpy(file_name_args, str, strlen(str);
 }
 
 /* Starts a new thread running a user program loaded from
@@ -52,9 +52,12 @@ process_execute (const char *file_name)
     return TID_ERROR;
   strlcpy (fn_copy, file_name, PGSIZE);
 
+  char* file_name_no_args;
+  get_file_name(file_name, file_name_no_args)
+
   /* Create a new thread to execute FILE_NAME. */
   // Make thread with filename without argument
-  tid = thread_create (get_file_name(file_name), PRI_DEFAULT, start_process, fn_copy);
+  tid = thread_create (file_name_no_args, PRI_DEFAULT, start_process, fn_copy);
   if (tid == TID_ERROR)
     palloc_free_page (fn_copy); 
   return tid;
@@ -103,6 +106,9 @@ start_process (void *file_name_)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
+  // Test before sys call implement
+  while (1);
+
   return -1;
 }
 
@@ -230,7 +236,8 @@ load (const char *file_name, void (**eip) (void), void **esp)
   bool success = false;
   int i;
 
-  char* file_name_no_args = get_file_name(file_name);
+  char* file_name_no_args;
+  get_file_name(file_name, file_name_no_args);
 
   /* Allocate and activate page directory. */
   t->pagedir = pagedir_create ();
@@ -475,7 +482,7 @@ void set_esp(void** esp, char* file_name)
 
     *esp = user_addr;
 
-	hex_dump(user_addr, user_addr, PHYS_BASE - user_addr, true);
+	hex_dump(*esp, *esp, PHYS_BASE - *esp, true);
 }
 
 /* Create a minimal stack by mapping a zeroed page at the top of
