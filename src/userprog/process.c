@@ -455,8 +455,6 @@ void set_esp(void** esp, char* file_name)
     int user_addr = PHYS_BASE;
 
     char* args[100];
-
-    char* file_name_no_args;
     char* token, * save_ptr;
     
     int num = 0;
@@ -464,7 +462,7 @@ void set_esp(void** esp, char* file_name)
     for (token = strtok_r(file_name, " ", &save_ptr); token != NULL;
         token = strtok_r(NULL, " ", &save_ptr))
     {
-        ASSERT(num > 100);
+        ASSERT(num <= 100);
         args[num++] = token;
     }
 
