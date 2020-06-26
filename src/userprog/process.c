@@ -109,8 +109,6 @@ int
 process_wait (tid_t child_tid UNUSED) 
 {
   // Test before sys call implement
-  while (1);
-
   return -1;
 }
 
@@ -471,7 +469,7 @@ void set_esp(void** esp, char* file_name)
     for (i = num - 1; i >= 0; i--)
     {
         int size = strlen(args[i]);
-        int num_word = size % WORD_SIZE;
+        int num_word = size / WORD_SIZE + 1;
         
         char* dest = user_addr - num_word * WORD_SIZE;
 
@@ -481,8 +479,6 @@ void set_esp(void** esp, char* file_name)
     }
 
     *esp = user_addr;
-
-	hex_dump(*esp, *esp, PHYS_BASE - *esp, true);
 }
 
 /* Create a minimal stack by mapping a zeroed page at the top of
