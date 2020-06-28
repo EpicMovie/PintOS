@@ -17,7 +17,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 {
   printf ("system call!\n");
 
-  hex_dump(f->esp, f->esp, 200, true);
+  // hex_dump(f->esp, f->esp, 200, true);
 
   /*
   switch (*(uint32_t*)(f->esp))

@@ -522,7 +522,7 @@ void set_esp(void** esp, char* file_name)
 
     *esp = user_addr;
 
-    // hex_dump(user_addr, user_addr, PHYS_BASE - user_addr, true);
+    hex_dump(user_addr, user_addr, 100, true);
 }
 /* Create a minimal stack by mapping a zeroed page at the top of
    user virtual memory. */
