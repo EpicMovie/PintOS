@@ -15,7 +15,8 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  printf ("system call!\n");
+  printf("system call!\n");
+  printf("Current esp : %x", f->esp);
 
   hex_dump(f->esp, f->esp, 100, true);
 
@@ -74,6 +75,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         // close();
         break;
     default:
+        printf("NOTHING\n");
         break;
   }
 }
@@ -90,7 +92,7 @@ void exit(int status)
 
 int exec(const char* file)
 {
-
+    return process_execute(file_name);
 }
 
 int wait(pid_t)
