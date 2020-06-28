@@ -16,7 +16,7 @@ static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
   printf("system call!\n");
-  printf("Current esp : %x", f->esp);
+  printf("Current esp : %x\n", f->esp);
 
   hex_dump(f->esp, f->esp, 100, true);
 
