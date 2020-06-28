@@ -460,13 +460,15 @@ void set_esp(void** esp, char* file_name)
     char* file_name_no_args;
     char* token, * save_ptr;
 
+    char null_word = '\0';
+
     int num = 0;
 
     for (token = strtok_r(file_name, " ", &save_ptr); token != NULL;
         token = strtok_r(NULL, " ", &save_ptr))
     {
         ASSERT(num <= 100);
-        args[num++] = strlcat(token, '\0', strlen(token) + 1);
+        args[num++] = strlcat(token, null_word, strlen(token) + 1);
     }
 
     int i;
