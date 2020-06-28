@@ -22,42 +22,55 @@ syscall_handler (struct intr_frame *f UNUSED)
   switch (*(uint32_t*)(f->esp))
   {
     case SYS_HALT:
+        printf("HALT\n");
         halt();
         break;
     case SYS_EXIT:
+        printf("EXIT\n");
         exit(*(uint32_t*)(f->esp + 4));
         break;
     case SYS_EXEC:
+        printf("EXEC\n");
         // exec();
         break;
     case SYS_WAIT:
+        printf("WAIT\n");
         // wait();
         break;
     case SYS_CREATE:
+        printf("CREATE\n");
         // create();
         break;
     case SYS_REMOVE:
+        printf("REMOVE\n");
         // remove();
         break;
     case SYS_OPEN:
+        printf("OPEN\n");
         // open();
         break;
     case SYS_FILESIZE:
+        printf("FILESIZE\n");
         // filesize();
         break;
     case SYS_READ:
+        printf("READ\n");
         // read();
         break;
     case SYS_WRITE:
+        printf("WRITE\n");
         // write();
         break;
     case SYS_SEEK:
+        printf("SEEK\n");
         // seek();
         break;
     case SYS_TELL:
+        printf("TELL\n");
         // tell();
         break;
     case SYS_CLOSE:
+        printf("CLOSE\n");
         // close();
         break;
     default:
