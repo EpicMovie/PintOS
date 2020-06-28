@@ -490,6 +490,7 @@ void set_esp(void** esp, char* file_name)
 
     if (word_align > 0)
     {
+        printf("word_algin : %d\n", word_align);
         user_addr -= word_align;
     }
 
