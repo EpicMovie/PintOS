@@ -24,7 +24,7 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  hex_dump(f->esp, f->esp, 100, true);
+  // hex_dump(f->esp, f->esp, 100, true);
   static uint32_t WORD_SIZE = 4;
 
   switch (*(uint32_t*)(f->esp))
@@ -90,6 +90,7 @@ void halt(void)
 
 void exit(int status)
 {
+    printf("%s: exit(%d)\n", thread_name(), status);
 	thread_exit();
 }
 
