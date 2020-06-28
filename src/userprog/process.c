@@ -484,53 +484,56 @@ void set_esp(void** esp, char* file_name)
 
         args_addr[i] = user_addr;
 
-        printf("args[%d] : %s\n", i, args[i], size);
+        // printf("args[%d] : %s\n", i, args[i], size);
     }
 
     uint32_t word_align = user_addr % WORD_SIZE;
-    printf("word_algin : %d\n", word_align);
+    // printf("word_algin : %d\n", word_align);
 
     if (word_align > 0)
     {
-        printf("aligned\n");
+        // printf("aligned\n");
         user_addr -= word_align;
     }
 
-    printf("user_addr : %x\n", user_addr);
+    // printf("user_addr : %x\n", user_addr);
 
     user_addr -= WORD_SIZE;
     memset((void*)user_addr, 0, 4);
 
-    printf("user_addr : %x\n", user_addr);
+    // printf("user_addr : %x\n", user_addr);
 
     for (i = num - 1; i >= 0; i--)
     {
         user_addr -= WORD_SIZE;
         memcpy((void*)user_addr, (void*)&args_addr[i], 4);
-        printf("args[%d] : %x\n", i, args_addr[i]);
+        // printf("args[%d] : %x\n", i, args_addr[i]);
     }
 
     uint32_t cur_addr = user_addr;
     user_addr -= WORD_SIZE;
 
-    printf("user_addr : %x\n", user_addr);
+    // printf("user_addr : %x\n", user_addr);
 
     memcpy((void*)user_addr, (void*)&cur_addr, 4);
 
-    printf("user_addr : %x\n", user_addr);
-
     user_addr -= WORD_SIZE;
+    
+    // printf("user_addr : %x\n", user_addr);
+    
     memcpy((void*)user_addr, (void *)&num, 2);
 
-    printf("user_addr : %x\n", user_addr);
-
     user_addr -= WORD_SIZE;
+
+    // printf("user_addr : %x\n", user_addr);
+
     memset((void*)user_addr, 0, 4);
 
     *esp = user_addr;
 
     hex_dump(user_addr, user_addr, 100, true);
 }
+
 /* Create a minimal stack by mapping a zeroed page at the top of
    user virtual memory. */
 static bool
