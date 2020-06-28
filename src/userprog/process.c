@@ -468,7 +468,7 @@ void set_esp(void** esp, char* file_name)
         token = strtok_r(NULL, " ", &save_ptr))
     {
         ASSERT(num <= 100);
-        args[num++] = strlcat(token, null_word, strlen(token) + 1);
+        args[num++] = strlcat(token, &null_word, strlen(token) + 1);
     }
 
     int i;
