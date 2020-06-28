@@ -469,9 +469,6 @@ void set_esp(void** esp, char* file_name)
         args[num++] = token;
     }
 
-    printf("num : %d\n", num);
-    args[num] = 0;
-
     int i;
 
     for (i = num - 1; i >= 0; i--)
@@ -486,6 +483,8 @@ void set_esp(void** esp, char* file_name)
 
         args_addr[i] = user_addr;
     }
+
+    args_addr[num] = 0;
 
     int word_align = user_addr % WORD_SIZE;
 
