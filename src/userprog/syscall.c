@@ -17,56 +17,52 @@ syscall_handler (struct intr_frame *f UNUSED)
 {
   printf ("system call!\n");
 
-  // hex_dump(f->esp, f->esp, 200, true);
+  hex_dump(f->esp, f->esp, 100, true);
 
-  /*
   switch (*(uint32_t*)(f->esp))
   {
     case SYS_HALT:
         halt();
         break;
     case SYS_EXIT:
-        exit();
+        exit(*(uint32_t*)(f->esp + 4));
         break;
     case SYS_EXEC:
-        exec();
+        // exec();
         break;
     case SYS_WAIT:
-        wait();
+        // wait();
         break;
     case SYS_CREATE:
-        create();
+        // create();
         break;
     case SYS_REMOVE:
-        remove();
+        // remove();
         break;
     case SYS_OPEN:
-        open();
+        // open();
         break;
     case SYS_FILESIZE:
-        filesize();
+        // filesize();
         break;
     case SYS_READ:
-        read();
+        // read();
         break;
     case SYS_WRITE:
-        write();
+        // write();
         break;
     case SYS_SEEK:
-        seek();
+        // seek();
         break;
     case SYS_TELL:
-        tell();
+        // tell();
         break;
     case SYS_CLOSE:
-        close();
+        // close();
         break;
     default:
         break;
   }
-  */
-
-  thread_exit();
 }
 
 void halt(void)
