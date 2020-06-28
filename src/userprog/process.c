@@ -469,6 +469,7 @@ void set_esp(void** esp, char* file_name)
         args[num++] = token;
     }
 
+    printf("num : %d\n", num);
     args[num] = 0;
 
     int i;
