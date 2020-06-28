@@ -480,18 +480,18 @@ void set_esp(void** esp, char* file_name)
         memcpy((void*)user_addr, (void*)args[i], size);
 
         args_addr[i] = user_addr;
-        // printf("args[%d] : %s\n", i, args[i]);
+        printf("args[%d] : %s\n", i, args[i]);
     }
 
     int word_align = user_addr % WORD_SIZE;
 
     if (word_align > 0)
     {
-        // printf("word_algin : %d\n", word_align);
+        printf("word_algin : %d\n", word_align);
         user_addr -= word_align;
     }
 
-    // printf("user_addr : %x\n", user_addr);
+    printf("user_addr : %x\n", user_addr);
 
     user_addr -= WORD_SIZE;
     memset((void*)user_addr, 0, 4);
@@ -500,22 +500,22 @@ void set_esp(void** esp, char* file_name)
     {
         user_addr -= WORD_SIZE;
         memcpy((void*)user_addr, (void*)args_addr[i], 4);
-        // printf("args[%d] : %x\n", i, args_addr[i]);
+        printf("args[%d] : %x\n", i, args_addr[i]);
     }
 
     int cur_addr = user_addr;
     user_addr -= WORD_SIZE;
 
-    // printf("user_addr : %x\n", user_addr);
+    printf("user_addr : %x\n", user_addr);
 
     memcpy((void*)user_addr, (void*)cur_addr, 4);
 
-    // printf("user_addr : %x\n", user_addr);
+    printf("user_addr : %x\n", user_addr);
 
     user_addr -= WORD_SIZE;
     memset((void*)user_addr, num, 4);
 
-    // printf("user_addr : %x\n", user_addr);
+    printf("user_addr : %x\n", user_addr);
 
     user_addr -= WORD_SIZE;
     memset((void*)user_addr, 0, 4);
