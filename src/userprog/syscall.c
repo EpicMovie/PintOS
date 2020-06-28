@@ -77,7 +77,7 @@ void exit(int status)
 	thread_exit();
 }
 
-pid_t exec(const char* file)
+int exec(const char* file)
 {
 
 }
