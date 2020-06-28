@@ -9,7 +9,7 @@ static void syscall_handler (struct intr_frame *);
 
 void check_user_addr(void* addr)
 {
-    if (!is_kernel_vaddr(addr))
+    if (is_kernel_vaddr(addr))
     {
         exit(-1);
     }
