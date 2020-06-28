@@ -4,8 +4,6 @@
 #include "threads/interrupt.h"
 #include "threads/thread.h"
 
-#define WORD_SIZE 4;
-
 static void syscall_handler (struct intr_frame *);
 
 void check_user_addr(void* addr)
@@ -26,6 +24,7 @@ static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
   // hex_dump(f->esp, f->esp, 100, true);
+  static uint32_t WORD_SIZE = 4;
 
   switch (*(uint32_t*)(f->esp))
   {
