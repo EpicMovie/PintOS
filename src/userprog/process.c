@@ -453,34 +453,76 @@ void set_esp(void** esp, char* file_name)
     int user_addr = PHYS_BASE;
 
     char* args[100];
+    int* args_addr[100];
+
+    char* file_name_no_args;
     char* token, * save_ptr;
-    
+
     int num = 0;
 
     for (token = strtok_r(file_name, " ", &save_ptr); token != NULL;
         token = strtok_r(NULL, " ", &save_ptr))
     {
-        ASSERT(num <= 100);
+        ASSERT(num > 100);
         args[num++] = token;
     }
+
+    args[num] = 0;
 
     int i;
 
     for (i = num - 1; i >= 0; i--)
     {
         int size = strlen(args[i]);
-        int num_word = size / WORD_SIZE + 1;
-        
-        char* dest = user_addr - num_word * WORD_SIZE;
+
+        user_addr -= size;
 
         memcpy((void*)dest, (void*)args[i], size);
 
-        user_addr -= num_word * WORD_SIZE;
+        printf("args[%d] : %s\n", i, args[i]);
+
+        args_addr[i] = user_addr;
     }
 
-    *esp = user_addr;
-}
+    int word_align = user_addr % WORD_SIZE;
 
+    if (word_align > 0)
+    {
+        user_addr -= word_align;
+    }
+
+    printf("user_addr : %x", user_addr);
+
+    for (i = num; i >= 0; i--)
+    {
+        user_addr -= WORD_SIZE;
+
+        printf("args[%d] : %x\n", i, args_addr[i]);
+
+        memcpy((void*)user_addr, (void*)args_addr[i], WORD_SIZE);
+    }
+
+    int cur_addr = user_addr;
+    user_addr -= WORD_SIZE;
+
+    printf("user_addr : %x", user_addr);
+
+    memcpy((void*)user_addr, (void*)cur_addr, WORD_SIZE);
+
+    printf("user_addr : %x", user_addr);
+
+    user_addr -= WORD_SIZE;
+    memcpy((void*)user_addr, (void*)num, WORD_SIZE);
+
+    printf("user_addr : %x", user_addr);
+
+    user_addr -= WORD_SIZE;
+    memset((void*)user_addr, 0, WORD_SIZE);
+
+    *esp = user_addr;
+
+    hex_dump(user_addr, user_addr, PHYS_BASE - user_addr, true);
+}
 /* Create a minimal stack by mapping a zeroed page at the top of
    user virtual memory. */
 static bool
