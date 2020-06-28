@@ -460,15 +460,13 @@ void set_esp(void** esp, char* file_name)
     char* file_name_no_args;
     char* token, * save_ptr;
 
-    char null_word = '\0';
-
     int num = 0;
 
     for (token = strtok_r(file_name, " ", &save_ptr); token != NULL;
         token = strtok_r(NULL, " ", &save_ptr))
     {
         ASSERT(num <= 100);
-        args[num++] = strlcat(token, &null_word, strlen(token) + 1);
+        args[num++] = token;
     }
 
     int i;
@@ -482,7 +480,10 @@ void set_esp(void** esp, char* file_name)
         memcpy((void*)user_addr, (void*)args[i], size);
 
         args_addr[i] = user_addr;
-        printf("args[%d] : %s - size : %d\n", i, args[i], size);
+
+        user_addr -= 1;
+        memset((void*)user_addr, '\0', 1);
+        printf("args[%d] : %s", i, args[i], size);
     }
 
     int word_align = user_addr % WORD_SIZE;
