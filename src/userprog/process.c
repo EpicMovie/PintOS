@@ -473,6 +473,9 @@ void set_esp(void** esp, char* file_name)
 
     for (i = num - 1; i >= 0; i--)
     {
+        user_addr -= 1;
+        memset((void*)user_addr, '\0', 1);
+
         int size = strlen(args[i]);
 
         user_addr -= size;
@@ -481,8 +484,6 @@ void set_esp(void** esp, char* file_name)
 
         args_addr[i] = user_addr;
 
-        user_addr -= 1;
-        memset((void*)user_addr, '\0', 1);
         printf("args[%d] : %s", i, args[i], size);
     }
 
