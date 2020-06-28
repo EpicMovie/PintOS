@@ -92,7 +92,7 @@ void exit(int status)
 
 int exec(const char* file)
 {
-    return process_execute(file_name);
+    return process_execute(file);
 }
 
 int wait(pid_t)
