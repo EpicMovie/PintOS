@@ -15,7 +15,7 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  printf("syscall num : %d\n", (int)(*f->esp));
+  printf("syscall : %d\n", *(uint32_t*)(f->esp));
   printf ("system call!\n");
   thread_exit ();
 }
