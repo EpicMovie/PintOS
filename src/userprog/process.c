@@ -30,7 +30,8 @@ void* get_file_name(const char* file_name, char* file_name_args)
     char str[100];
     char* dummy;
 
-    strlcpy(str, file_name, strlen(file_name));
+    // strlcpy copy n-1 and add \0 in nth index
+    strlcpy(str, file_name, strlen(file_name) + 1);
 
     dummy = strtok_r(str, " ", &dummy);
 
