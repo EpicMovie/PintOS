@@ -109,9 +109,16 @@ int
 process_wait (tid_t child_tid UNUSED) 
 {
   // Test code
-  while (1); 
+  int i;
+  int sum;
+
+  for (i = 0; i < 10000000; i++)
+  {
+    sum += i;
+  }
+
   // Test before sys call implement
-  return -1;
+  return -1 + sum;
 }
 
 /* Free the current process's resources. */
