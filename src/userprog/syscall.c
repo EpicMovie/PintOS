@@ -27,16 +27,16 @@ syscall_handler (struct intr_frame *f UNUSED)
         halt();
         break;
     case SYS_EXIT:
-        printf("EXIT\n");
-        exit(*(uint32_t*)(f->esp + 4));
+        printf("EXIT\n");    
+        exit(*(uint32_t*)(f->esp + 20));
         break;
     case SYS_EXEC:
         printf("EXEC\n");
-        // exec();
+        exec(*(uint32_t*)(f->esp + 20));
         break;
     case SYS_WAIT:
         printf("WAIT\n");
-        // wait();
+        wait(*(uint32_t*)(f->esp + 20));
         break;
     case SYS_CREATE:
         printf("CREATE\n");
@@ -56,10 +56,10 @@ syscall_handler (struct intr_frame *f UNUSED)
         break;
     case SYS_READ:
         printf("READ\n");
-        // read();
+        read((int)*(uint32_t*)(f->esp + 20), (void*)*(uint32_t*)(f->esp + 24), (unsigned)*((uint32_t*)(f->esp + 28)));
         break;
     case SYS_WRITE:
-        printf("WRITE\n");
+        f->eax = write((int)*(uint32_t*)(f->esp + 20), (void*)*(uint32_t*)(f->esp + 24), (unsigned)*((uint32_t*)(f->esp + 28)));
         // write();
         break;
     case SYS_SEEK:
@@ -97,7 +97,7 @@ int exec(const char* file)
 
 int wait(pid_t)
 {
-
+    process_wait();
 }
 
 bool create(const char* file, unsigned initial_size)
@@ -122,7 +122,18 @@ int filesize(int fd)
 
 int read(int fd, void* buffer, unsigned length)
 {
-
+    int i;
+    if (fd == 0) 
+    {
+        for (i = 0; i < size; i++) 
+        {
+            if (((char*)buffer)[i] == '\0') 
+            {
+                break;
+            }
+        }
+    }
+    return i;
 }
 
 int write(int fd, const void* buffer, unsigned length)
