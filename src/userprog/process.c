@@ -491,7 +491,7 @@ void set_esp(void** esp, char* file_name)
         user_addr -= word_align;
     }
 
-    printf("user_addr : %x", user_addr);
+    printf("user_addr : %x\n", user_addr);
 
     for (i = num; i >= 0; i--)
     {
@@ -505,16 +505,16 @@ void set_esp(void** esp, char* file_name)
     int cur_addr = user_addr;
     user_addr -= WORD_SIZE;
 
-    printf("user_addr : %x", user_addr);
+    printf("user_addr : %x\n", user_addr);
 
     memcpy((void*)user_addr, (void*)cur_addr, 4);
 
-    printf("user_addr : %x", user_addr);
+    printf("user_addr : %x\n", user_addr);
 
     user_addr -= WORD_SIZE;
     memcpy((void*)user_addr, (void*)num, 4);
 
-    printf("user_addr : %x", user_addr);
+    printf("user_addr : %x\n", user_addr);
 
     user_addr -= WORD_SIZE;
     memset((void*)user_addr, 0, 4);
