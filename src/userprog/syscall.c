@@ -125,7 +125,7 @@ int read(int fd, void* buffer, unsigned length)
     int i;
     if (fd == 0) 
     {
-        for (i = 0; i < size; i++) 
+        for (i = 0; i < length; i++)
         {
             if (((char*)buffer)[i] == '\0') 
             {
