@@ -109,7 +109,7 @@ int
 process_wait (tid_t child_tid UNUSED) 
 {
   // Test code
-  while (1); 
+  // while (1); 
   // Test before sys call implement
   return -1;
 }
