@@ -452,7 +452,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 
 void set_esp(void** esp, char* file_name)
 {
-    int user_addr = PHYS_BASE;
+    uint32_t user_addr = PHYS_BASE;
 
     char* args[100];
     int* args_addr[100];
