@@ -487,11 +487,12 @@ void set_esp(void** esp, char* file_name)
         printf("args[%d] : %s\n", i, args[i], size);
     }
 
-    int word_align = user_addr % WORD_SIZE;
+    uint32_t word_align = user_addr % WORD_SIZE;
     printf("word_algin : %d\n", word_align);
 
     if (word_align > 0)
     {
+        printf("aligned\n");
         user_addr -= word_align;
     }
 
