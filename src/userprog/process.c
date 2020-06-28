@@ -515,7 +515,7 @@ void set_esp(void** esp, char* file_name)
     printf("user_addr : %x\n", user_addr);
 
     user_addr -= WORD_SIZE;
-    memcpy((void*)user_addr, (void*)num, 4);
+    memset((void*)user_addr, num, 4);
 
     printf("user_addr : %x\n", user_addr);
 
