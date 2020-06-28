@@ -55,6 +55,7 @@ process_execute (const char *file_name)
   strlcpy (fn_copy, file_name, PGSIZE);
 
   char file_name_no_args[100];
+  memset(file_name_no_args, 0, 100);
   get_file_name(file_name, file_name_no_args);
 
   /* Create a new thread to execute FILE_NAME. */
@@ -246,6 +247,7 @@ load (const char *file_name, void (**eip) (void), void **esp)
   int i;
 
   char file_name_no_args[100];
+  memset(file_name_no_args, 0, 100);
   get_file_name(file_name, file_name_no_args);
 
   /* Allocate and activate page directory. */
