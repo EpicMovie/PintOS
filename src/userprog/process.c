@@ -506,7 +506,7 @@ void set_esp(void** esp, char* file_name)
     for (i = num - 1; i >= 0; i--)
     {
         user_addr -= WORD_SIZE;
-        memcpy((void*)user_addr, (void*)args_addr[i], 4);
+        memset((void*)user_addr, args_addr[i], 4);
         printf("args[%d] : %x\n", i, args_addr[i]);
     }
 
