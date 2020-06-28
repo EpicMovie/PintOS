@@ -501,6 +501,8 @@ void set_esp(void** esp, char* file_name)
     user_addr -= WORD_SIZE;
     memset((void*)user_addr, 0, 4);
 
+    printf("user_addr : %x\n", user_addr);
+
     for (i = num - 1; i >= 0; i--)
     {
         user_addr -= WORD_SIZE;
