@@ -480,7 +480,7 @@ void set_esp(void** esp, char* file_name)
         memcpy((void*)user_addr, (void*)args[i], size);
 
         args_addr[i] = user_addr;
-        printf("args[%d] : %s\n", i, args[i]);
+        printf("args[%d] : %s - size : %d\n", i, args[i], size);
     }
 
     int word_align = user_addr % WORD_SIZE;
