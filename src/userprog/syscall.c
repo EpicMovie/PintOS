@@ -15,47 +15,35 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  printf("system call!\n");
-  printf("Current esp : %x\n", f->esp);
-
-  hex_dump(f->esp, f->esp, 100, true);
+  // hex_dump(f->esp, f->esp, 100, true);
 
   switch (*(uint32_t*)(f->esp))
   {
     case SYS_HALT:
-        printf("HALT\n");
         halt();
         break;
     case SYS_EXIT:
-        printf("EXIT\n");    
         exit(*(uint32_t*)(f->esp + 20));
         break;
     case SYS_EXEC:
-        printf("EXEC\n");
         exec(*(uint32_t*)(f->esp + 20));
         break;
     case SYS_WAIT:
-        printf("WAIT\n");
         wait(*(uint32_t*)(f->esp + 20));
         break;
     case SYS_CREATE:
-        printf("CREATE\n");
         // create();
         break;
     case SYS_REMOVE:
-        printf("REMOVE\n");
         // remove();
         break;
     case SYS_OPEN:
-        printf("OPEN\n");
         // open();
         break;
     case SYS_FILESIZE:
-        printf("FILESIZE\n");
         // filesize();
         break;
     case SYS_READ:
-        printf("READ\n");
         read((int)*(uint32_t*)(f->esp + 20), (void*)*(uint32_t*)(f->esp + 24), (unsigned)*((uint32_t*)(f->esp + 28)));
         break;
     case SYS_WRITE:
@@ -63,19 +51,15 @@ syscall_handler (struct intr_frame *f UNUSED)
         // write();
         break;
     case SYS_SEEK:
-        printf("SEEK\n");
         // seek();
         break;
     case SYS_TELL:
-        printf("TELL\n");
         // tell();
         break;
     case SYS_CLOSE:
-        printf("CLOSE\n");
         // close();
         break;
     default:
-        printf("NOTHING\n");
         break;
   }
 }
