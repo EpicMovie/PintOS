@@ -455,7 +455,7 @@ void set_esp(void** esp, char* file_name)
     uint32_t user_addr = PHYS_BASE;
 
     char* args[100];
-    int* args_addr[100];
+    uint32_t* args_addr[100];
 
     char* file_name_no_args;
     char* token, * save_ptr;
