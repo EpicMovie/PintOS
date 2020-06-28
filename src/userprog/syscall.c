@@ -4,7 +4,17 @@
 #include "threads/interrupt.h"
 #include "threads/thread.h"
 
+#define WORD_SIZE 4;
+
 static void syscall_handler (struct intr_frame *);
+
+void check_user_addr(void* addr)
+{
+    if (!is_user_vaddr(addr))
+    {
+        exit(-1);
+    }
+}
 
 void
 syscall_init (void) 
@@ -23,13 +33,16 @@ syscall_handler (struct intr_frame *f UNUSED)
         halt();
         break;
     case SYS_EXIT:
-        exit(*(uint32_t*)(f->esp + 20));
+        check_user_addr(f->esp + WORD_SIZE);
+        exit(*(uint32_t*)(f->esp + WORD_SIZE));
         break;
     case SYS_EXEC:
-        exec(*(uint32_t*)(f->esp + 20));
+        check_user_addr(f->esp + WORD_SIZE);
+        exec(*(uint32_t*)(f->esp + WORD_SIZE));
         break;
     case SYS_WAIT:
-        wait(*(uint32_t*)(f->esp + 20));
+        check_user_addr(f->esp + WORD_SIZE);
+        wait(*(uint32_t*)(f->esp + WORD_SIZE));
         break;
     case SYS_CREATE:
         // create();
@@ -44,10 +57,16 @@ syscall_handler (struct intr_frame *f UNUSED)
         // filesize();
         break;
     case SYS_READ:
-        read((int)*(uint32_t*)(f->esp + 20), (void*)*(uint32_t*)(f->esp + 24), (unsigned)*((uint32_t*)(f->esp + 28)));
+        check_user_addr(f->esp + WORD_SIZE);
+        check_user_addr(f->esp + WORD_SIZE * 2);
+        check_user_addr(f->esp + WORD_SIZE * 3);
+        read((int)*(uint32_t*)(f->esp + WORD_SIZE), (void*)*(uint32_t*)(f->esp + WORD_SIZE * 2), (unsigned)*((uint32_t*)(f->esp + WORD_SIZE * 3)));
         break;
     case SYS_WRITE:
-        f->eax = write((int)*(uint32_t*)(f->esp + 20), (void*)*(uint32_t*)(f->esp + 24), (unsigned)*((uint32_t*)(f->esp + 28)));
+        check_user_addr(f->esp + WORD_SIZE);
+        check_user_addr(f->esp + WORD_SIZE * 2);
+        check_user_addr(f->esp + WORD_SIZE * 3);
+        f->eax = write((int)*(uint32_t*)(f->esp + WORD_SIZE), (void*)*(uint32_t*)(f->esp + WORD_SIZE * 2), (unsigned)*((uint32_t*)(f->esp + WORD_SIZE * 3)));
         // write();
         break;
     case SYS_SEEK:
