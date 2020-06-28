@@ -477,7 +477,7 @@ void set_esp(void** esp, char* file_name)
 
         user_addr -= size;
 
-        memcpy((void*)dest, (void*)args[i], size);
+        memcpy((void*)user_addr, (void*)args[i], size);
 
         printf("args[%d] : %s\n", i, args[i]);
 
@@ -499,7 +499,7 @@ void set_esp(void** esp, char* file_name)
 
         printf("args[%d] : %x\n", i, args_addr[i]);
 
-        memcpy((void*)user_addr, (void*)args_addr[i], WORD_SIZE);
+        memcpy((void*)user_addr, (void*)args_addr[i], 4);
     }
 
     int cur_addr = user_addr;
@@ -507,17 +507,17 @@ void set_esp(void** esp, char* file_name)
 
     printf("user_addr : %x", user_addr);
 
-    memcpy((void*)user_addr, (void*)cur_addr, WORD_SIZE);
+    memcpy((void*)user_addr, (void*)cur_addr, 4);
 
     printf("user_addr : %x", user_addr);
 
     user_addr -= WORD_SIZE;
-    memcpy((void*)user_addr, (void*)num, WORD_SIZE);
+    memcpy((void*)user_addr, (void*)num, 4);
 
     printf("user_addr : %x", user_addr);
 
     user_addr -= WORD_SIZE;
-    memset((void*)user_addr, 0, WORD_SIZE);
+    memset((void*)user_addr, 0, 4);
 
     *esp = user_addr;
 
