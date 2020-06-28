@@ -510,12 +510,12 @@ void set_esp(void** esp, char* file_name)
         printf("args[%d] : %x\n", i, args_addr[i]);
     }
 
-    int cur_addr = user_addr;
+    uint32_t cur_addr = user_addr;
     user_addr -= WORD_SIZE;
 
     printf("user_addr : %x\n", user_addr);
 
-    memcpy((void*)user_addr, (void*)cur_addr, 4);
+    memcpy((void*)user_addr, (void*)&cur_addr, 4);
 
     printf("user_addr : %x\n", user_addr);
 
