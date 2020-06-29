@@ -18,6 +18,16 @@ struct file *
 file_open (struct inode *inode) 
 {
   struct file *file = calloc (1, sizeof *file);
+  if (file != NULL)
+  {
+      printf("A success\n");
+  }
+
+  if (inode != NULL)
+  {
+      printf("B success\n");
+  }
+
   if (inode != NULL && file != NULL)
     {
       printf("created file\n");
