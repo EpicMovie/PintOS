@@ -133,6 +133,7 @@ int open(const char* file)
 {
     check_user_addr(file);
 
+    int i;
     struct file* fp = filesys_open(file);
     
     if (fp == NULL) 
@@ -142,7 +143,8 @@ int open(const char* file)
     else
     {
         for (i = 3; i < 128; i++) {
-            if (thread_current()->fd[i] == NULL) {
+            if (thread_current()->fd[i] == NULL) 
+            {
                 thread_current()->fd[i] = fp;
                 return i;
             }
