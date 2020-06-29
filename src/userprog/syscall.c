@@ -190,12 +190,19 @@ int write(int fd, const void* buffer, unsigned size)
 {
     check_user_addr(buffer);
 
-    if (fd == 1)
+    if (fd == 0)
     {
-        putbuf((char*)buffer, size);
-        return size;
+        return putbuf((char*)buffer, size);
     }
-
+    else if (fd > 2)
+    {
+        return file_write(thread_current()->fd[fd], buffer, size);
+    }
+    else if (fd = > 128)
+    {
+        exit(-1);
+    }
+    
     return 0;
 }
 
