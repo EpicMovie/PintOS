@@ -178,7 +178,7 @@ int read(int fd, void* buffer, unsigned size)
     {
         return file_read(thread_current()->fd[fd], buffer, size);
     }
-    else if (fd >= 128 || thread_current()->fd[fd] == NULL)
+    else if (fd >= 128 || fd < 0 || thread_current()->fd[fd] == NULL)
     {
         exit(-1);
     }
@@ -199,7 +199,7 @@ int write(int fd, const void* buffer, unsigned size)
     {
         return file_write(thread_current()->fd[fd], buffer, size);
     }
-    else if (fd >= 128 || thread_current()->fd[fd] == NULL)
+    else if (fd >= 128 || fd < 0 || thread_current()->fd[fd] == NULL)
     {
         exit(-1);
     }
