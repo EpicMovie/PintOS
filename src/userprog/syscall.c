@@ -132,8 +132,24 @@ bool remove(const char* file)
 int open(const char* file)
 {
     check_user_addr(file);
+
+    struct file* fp = filesys_open(file);
     
-    return filesys_open(file);
+    if (fp == NULL) 
+    {
+        return -1;
+    }
+    else
+    {
+        for (i = 3; i < 128; i++) {
+            if (thread_current()->fd[i] == NULL) {
+                thread_current()->fd[i] = fp;
+                return i;
+            }
+        }
+    }
+
+    return -1;
 }
 
 int filesize(int fd)

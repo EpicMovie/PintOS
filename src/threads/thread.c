@@ -509,6 +509,15 @@ init_thread (struct thread *t, const char *name, int priority)
   t->lock_to_try = NULL;
   t->priority_depth = 0;
 
+#ifdef USERPROG     
+  int i = 0;
+
+  for (i = 0; i < 128; i++) 
+  {
+      t->fd[i] = NULL;
+  }
+#endif
+
   list_push_back (&all_list, &t->allelem);
 }
 
