@@ -120,10 +120,12 @@ bool create_file(const char* file, unsigned initial_size)
 
     if (strlen(file) == 0 || initial_size == 0)
     {
+        printf("No file create\n");
         return false;
     }
     else
     {
+        printf("Create file name\n");
         return filesys_create(file, initial_size);
     }
 }
