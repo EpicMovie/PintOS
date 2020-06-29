@@ -133,6 +133,8 @@ int open(const char* file)
 {
     check_user_addr(file);
 
+    printf("Test\n");
+
     return filesys_open(file);
 }
 
