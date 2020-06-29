@@ -133,28 +133,7 @@ int open(const char* file)
 {
     check_user_addr(file);
     
-    int i;
-    struct file* fp = filesys_open(file);
-    
-    if (fp == NULL) 
-    {
-        return -1;
-    }
-    else 
-    {
-        for (i = 3; i < 128; i++) 
-        {
-            if (thread_current()->fd[i] == NULL) 
-            {
-                thread_current()->fd[i] = fp;
-                return i;
-            }
-        }
-    }
-
-    return -1;
-
-    // return filesys_open(file);
+    return filesys_open(file);
 }
 
 int filesize(int fd)
