@@ -129,6 +129,11 @@ dir_lookup (const struct dir *dir, const char *name,
   else
     *inode = NULL;
 
+  if (inode != NULL)
+  {
+      printf("file_lookup success\n");
+  }
+
   return *inode != NULL;
 }
 
