@@ -120,7 +120,7 @@ bool create_file(const char* file, unsigned initial_size)
 
     if (strlen(file) == 0)
     {
-        return;
+        return false;
     }
     else
     {
