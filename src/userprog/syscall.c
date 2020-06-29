@@ -16,7 +16,7 @@ void check_user_addr(void* addr)
 {
     uint32_t addr_int = (uint32_t)(addr);
 
-    if (is_kernel_vaddr(addr) || addr_int < BOTTOM_ADDR_SPACE || pagedir_get_page(thread_current()->pagedir, addr) != NULL)
+    if (is_kernel_vaddr(addr) || addr_int < BOTTOM_ADDR_SPACE || pagedir_get_page(thread_current()->pagedir, addr) == NULL)
     {
         exit(-1);
     }
