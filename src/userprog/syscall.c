@@ -156,7 +156,7 @@ int open(const char* file)
 
 int filesize(int fd)
 {
-    return filesize(fd);
+    return file_length(thread_current()->fd[fd]);
 }
 
 int read(int fd, void* buffer, unsigned size)
