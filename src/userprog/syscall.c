@@ -174,11 +174,11 @@ int read(int fd, void* buffer, unsigned size)
             }
         }
     }
-    else if (fd > 2 && thread_current()->fd[fd] != NULL)
+    else if (fd > 2 && fd < 128 && thread_current()->fd[fd] != NULL)
     {
         return file_read(thread_current()->fd[fd], buffer, size);
     }
-    else if (fd >= 128 || fd < 0 || thread_current()->fd[fd] == NULL)
+    else
     {
         exit(-1);
     }
@@ -195,11 +195,11 @@ int write(int fd, const void* buffer, unsigned size)
         putbuf((char*)buffer, size);
         return size;
     }
-    else if (fd > 2 && thread_current()->fd[fd] != NULL)
+    else if (fd > 2 && fd < 128 && thread_current()->fd[fd] != NULL)
     {
         return file_write(thread_current()->fd[fd], buffer, size);
     }
-    else if (fd >= 128 || fd < 0 || thread_current()->fd[fd] == NULL)
+    else
     {
         exit(-1);
     }
