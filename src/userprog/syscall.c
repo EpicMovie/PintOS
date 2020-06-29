@@ -190,7 +190,7 @@ int write(int fd, const void* buffer, unsigned size)
 {
     check_user_addr(buffer);
 
-    if (fd == 0)
+    if (fd == 1)
     {
         putbuf((char*)buffer, size);
         return size;
