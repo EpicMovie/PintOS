@@ -4,6 +4,7 @@
 #include "threads/interrupt.h"
 #include "threads/thread.h"
 #include "threads/vaddr.h"
+#include "filesys/filesys.h"
 
 #define BOTTOM_ADDR_SPACE 0x08048000
 
@@ -50,7 +51,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         wait(*(uint32_t*)(f->esp + WORD_SIZE));
         break;
     case SYS_CREATE:
-        // create();
+        check_user_addr(f->esp + WORD_SIZE);
+        check_user_addr(f->esp + WORD_SIZE * 2);
+        create((const char*)*(uint32_t*)(f->esp + WORD_SIZE), (unsigned)*(uint32_t*)(f->esp + WORD_SIZE * 2));
         break;
     case SYS_REMOVE:
         // remove();
@@ -111,7 +114,7 @@ int wait(pid_t)
 
 bool create(const char* file, unsigned initial_size)
 {
-
+    return filesys_create(file, initial_size);
 }
 
 bool remove(const char* file)
