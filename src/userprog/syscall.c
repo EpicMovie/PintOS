@@ -5,11 +5,15 @@
 #include "threads/thread.h"
 #include "threads/vaddr.h"
 
+#define BOTTOM_ADDR_SPACE 0x08048000
+
 static void syscall_handler (struct intr_frame *);
 
 void check_user_addr(void* addr)
 {
-    if (is_kernel_vaddr(addr))
+    uint32_t addr_int = (uint32_t)(addr);
+
+    if (is_kernel_vaddr(addr) || addr_int < BOTTOM_ADDR_SPACE)
     {
         exit(-1);
     }
