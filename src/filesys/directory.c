@@ -71,6 +71,7 @@ dir_close (struct dir *dir)
 {
   if (dir != NULL)
     {
+      printf("Close\n");
       inode_close (dir->inode);
       free (dir);
     }
@@ -129,7 +130,7 @@ dir_lookup (const struct dir *dir, const char *name,
   else
     *inode = NULL;
 
-  if (inode != NULL)
+  if (inode != NULL && *inode != NULL)
   {
       printf("file_lookup success\n");
   }
