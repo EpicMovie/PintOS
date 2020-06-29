@@ -132,12 +132,12 @@ int filesize(int fd)
 
 }
 
-int read(int fd, void* buffer, unsigned length)
+int read(int fd, void* buffer, unsigned size)
 {
     int i;
     if (fd == 0) 
     {
-        for (i = 0; i < length; i++)
+        for (i = 0; i < size; i++)
         {
             if (((char*)buffer)[i] == '\0') 
             {
@@ -148,12 +148,12 @@ int read(int fd, void* buffer, unsigned length)
     return i;
 }
 
-int write(int fd, const void* buffer, unsigned length)
+int write(int fd, const void* buffer, unsigned size)
 {
     if (fd == 1)
     {
-        putbuf((char*)buffer, length);
-        return length;
+        putbuf((char*)buffer, size);
+        return size;
     }
 
     return 0;
