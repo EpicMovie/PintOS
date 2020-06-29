@@ -16,7 +16,7 @@ void check_user_addr(void* addr)
 {
     uint32_t addr_int = (uint32_t)(addr);
 
-    if (is_kernel_vaddr(addr) || addr_int < BOTTOM_ADDR_SPACE || pagedir_get_page(thread_current()->pagedir, addr) == NULL)
+    if (is_kernel_vaddr(addr) || pagedir_get_page(thread_current()->pagedir, addr) == NULL)
     {
         exit(-1);
     }
@@ -118,14 +118,7 @@ bool create_file(const char* file, unsigned initial_size)
 {
     check_user_addr(file);
 
-    if (strlen(file) == 0 || initial_size == 0)
-    {
-        return false;
-    }
-    else
-    {
-        return filesys_create(file, initial_size);
-    }
+    return filesys_create(file, initial_size);
 }
 
 bool remove(const char* file)
