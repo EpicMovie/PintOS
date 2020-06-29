@@ -31,6 +31,7 @@ syscall_handler (struct intr_frame *f UNUSED)
   // hex_dump(f->esp, f->esp, 100, true);
   static uint32_t WORD_SIZE = 4;
 
+  check_user_addr(f->esp);
   switch (*(uint32_t*)(f->esp))
   {
     case SYS_HALT:
