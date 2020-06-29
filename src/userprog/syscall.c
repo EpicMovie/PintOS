@@ -55,7 +55,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_CREATE:
         check_user_addr(f->esp + WORD_SIZE);
         check_user_addr(f->esp + WORD_SIZE * 2);
-        create_file((const char*)*(uint32_t*)(f->esp + WORD_SIZE), (unsigned)*(uint32_t*)(f->esp + WORD_SIZE * 2));
+        f->eax = create_file((const char*)*(uint32_t*)(f->esp + WORD_SIZE), (unsigned)*(uint32_t*)(f->esp + WORD_SIZE * 2));
         break;
     case SYS_REMOVE:
         // remove();
@@ -120,13 +120,10 @@ bool create_file(const char* file, unsigned initial_size)
 
     if (strlen(file) == 0 || initial_size == 0)
     {
-        exit(-1);
-        printf("No file create\n");
         return false;
     }
     else
     {
-        printf("Create file name\n");
         return filesys_create(file, initial_size);
     }
 }
