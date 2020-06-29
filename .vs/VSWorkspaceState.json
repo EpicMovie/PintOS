@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\userprog"
+    "\\src\\tests",
+    "\\src\\tests\\userprog"
   ],
-  "SelectedNode": "\\src\\userprog\\process.c",
+  "SelectedNode": "\\src\\tests\\userprog\\sc-bad-sp.c",
   "PreviewInSolutionExplorer": false
 }
