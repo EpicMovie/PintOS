@@ -118,14 +118,12 @@ bool create_file(const char* file, unsigned initial_size)
 {
     check_user_addr(file);
 
-    if (strlen(file) == 0)
+    if (strlen(file) == 0 || initial_size == 0)
     {
-        printf("TEst\n");
         return false;
     }
     else
     {
-        printf("Test2\n");
         return filesys_create(file, initial_size);
     }
 }
