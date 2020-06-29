@@ -2,9 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\tests",
-    "\\src\\tests\\userprog"
+    "\\src\\filesys",
+    "\\src\\userprog"
   ],
-  "SelectedNode": "\\src\\tests\\userprog\\sc-bad-sp.c",
+  "SelectedNode": "\\src\\userprog\\syscall.h",
   "PreviewInSolutionExplorer": false
 }

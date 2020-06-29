@@ -15,8 +15,9 @@ bool create_file(const char*, unsigned);
 void check_user_addr(void* addr)
 {
     uint32_t addr_int = (uint32_t)(addr);
+    uint32_t data = *addr;
 
-    if (is_kernel_vaddr(addr) || addr_int < BOTTOM_ADDR_SPACE)
+    if (is_kernel_vaddr(addr) || addr_int < BOTTOM_ADDR_SPACE || data == NULL)
     {
         exit(-1);
     }
