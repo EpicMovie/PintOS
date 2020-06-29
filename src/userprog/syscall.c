@@ -161,6 +161,8 @@ int filesize(int fd)
 
 int read(int fd, void* buffer, unsigned size)
 {
+    check_user_addr(buffer);
+
     int i;
     if (fd == 0) 
     {
