@@ -46,11 +46,11 @@ syscall_handler (struct intr_frame *f UNUSED)
         break;
     case SYS_EXEC:
         check_user_addr(f->esp + WORD_SIZE);
-        exec(*(uint32_t*)(f->esp + WORD_SIZE));
+        f->eax = exec(*(uint32_t*)(f->esp + WORD_SIZE));
         break;
     case SYS_WAIT:
         check_user_addr(f->esp + WORD_SIZE);
-        wait(*(uint32_t*)(f->esp + WORD_SIZE));
+        f->eax = wait(*(uint32_t*)(f->esp + WORD_SIZE));
         break;
     case SYS_CREATE:
         check_user_addr(f->esp + WORD_SIZE);
@@ -61,10 +61,12 @@ syscall_handler (struct intr_frame *f UNUSED)
         // remove();
         break;
     case SYS_OPEN:
-        // open();
+        check_user_addr(f->esp + WORD_SIZE);
+        f->eax = open((const char*)*(uint32_t*)(f->esp + WORD_SIZE));
         break;
     case SYS_FILESIZE:
-        // filesize();
+        check_user_addr(f->esp + WORD_SIZE);
+        f->eax = filesize((int)*(uint32_t*)(f->esp + WORD_SIZE));
         break;
     case SYS_READ:
         check_user_addr(f->esp + WORD_SIZE);
@@ -77,7 +79,6 @@ syscall_handler (struct intr_frame *f UNUSED)
         check_user_addr(f->esp + WORD_SIZE * 2);
         check_user_addr(f->esp + WORD_SIZE * 3);
         f->eax = write((int)*(uint32_t*)(f->esp + WORD_SIZE), (void*)*(uint32_t*)(f->esp + WORD_SIZE * 2), (unsigned)*((uint32_t*)(f->esp + WORD_SIZE * 3)));
-        // write();
         break;
     case SYS_SEEK:
         // seek();
@@ -106,6 +107,8 @@ void exit(int status)
 
 int exec(const char* file)
 {
+    check_user_addr(file);
+
     return process_execute(file);
 }
 
@@ -128,12 +131,14 @@ bool remove(const char* file)
 
 int open(const char* file)
 {
+    check_user_addr(file);
 
+    return filesys_open(file);
 }
 
 int filesize(int fd)
 {
-
+    return filesize(fd);
 }
 
 int read(int fd, void* buffer, unsigned size)
@@ -154,6 +159,8 @@ int read(int fd, void* buffer, unsigned size)
 
 int write(int fd, const void* buffer, unsigned size)
 {
+    check_user_addr(buffer);
+
     if (fd == 1)
     {
         putbuf((char*)buffer, size);
