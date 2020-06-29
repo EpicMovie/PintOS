@@ -204,7 +204,7 @@ int write(int fd, const void* buffer, unsigned size)
         exit(-1);
     }
     
-    return 0;
+    return -1;
 }
 
 void seek(int fd, unsigned position)
