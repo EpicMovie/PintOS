@@ -117,6 +117,8 @@ int wait(pid_t)
 
 bool create_file(const char* file, unsigned initial_size)
 {
+    check_user_addr(file);
+
     return filesys_create(file, initial_size);
 }
 
