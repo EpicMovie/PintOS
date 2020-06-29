@@ -70,7 +70,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         check_user_addr(f->esp + WORD_SIZE);
         check_user_addr(f->esp + WORD_SIZE * 2);
         check_user_addr(f->esp + WORD_SIZE * 3);
-        read((int)*(uint32_t*)(f->esp + WORD_SIZE), (void*)*(uint32_t*)(f->esp + WORD_SIZE * 2), (unsigned)*((uint32_t*)(f->esp + WORD_SIZE * 3)));
+        f->eax = read((int)*(uint32_t*)(f->esp + WORD_SIZE), (void*)*(uint32_t*)(f->esp + WORD_SIZE * 2), (unsigned)*((uint32_t*)(f->esp + WORD_SIZE * 3)));
         break;
     case SYS_WRITE:
         check_user_addr(f->esp + WORD_SIZE);
