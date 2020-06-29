@@ -10,6 +10,8 @@
 
 static void syscall_handler (struct intr_frame *);
 
+bool create_file(const char*, unsigned);
+
 void check_user_addr(void* addr)
 {
     uint32_t addr_int = (uint32_t)(addr);
@@ -53,7 +55,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_CREATE:
         check_user_addr(f->esp + WORD_SIZE);
         check_user_addr(f->esp + WORD_SIZE * 2);
-        create((const char*)*(uint32_t*)(f->esp + WORD_SIZE), (unsigned)*(uint32_t*)(f->esp + WORD_SIZE * 2));
+        create_file((const char*)*(uint32_t*)(f->esp + WORD_SIZE), (unsigned)*(uint32_t*)(f->esp + WORD_SIZE * 2));
         break;
     case SYS_REMOVE:
         // remove();
@@ -112,7 +114,7 @@ int wait(pid_t)
     process_wait();
 }
 
-bool create(const char* file, unsigned initial_size)
+bool create_file(const char* file, unsigned initial_size)
 {
     return filesys_create(file, initial_size);
 }
