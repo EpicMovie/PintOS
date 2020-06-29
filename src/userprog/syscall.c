@@ -192,7 +192,8 @@ int write(int fd, const void* buffer, unsigned size)
 
     if (fd == 0)
     {
-        return putbuf((char*)buffer, size);
+        putbuf((char*)buffer, size);
+        return size;
     }
     else if (fd > 2)
     {
