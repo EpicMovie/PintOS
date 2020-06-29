@@ -178,6 +178,10 @@ int read(int fd, void* buffer, unsigned size)
     {
         return file_read(thread_current()->fd[fd], buffer, size);
     }
+    else if (fd => 128)
+    {
+        exit(-1);
+    }
 
     return i;
 }
