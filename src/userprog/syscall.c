@@ -166,7 +166,7 @@ int read(int fd, void* buffer, unsigned size)
     {
         for (i = 0; i < size; i++)
         {
-            if ((char*)buffer)[i] == '\0')
+            if ((char*)buffer[i] == '\0')
             {
                 break;
             }
