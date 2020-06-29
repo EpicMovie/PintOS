@@ -166,12 +166,17 @@ int read(int fd, void* buffer, unsigned size)
     {
         for (i = 0; i < size; i++)
         {
-            if (((char*)buffer)[i] == '\0') 
+            if ((char*)buffer)[i] == '\0')
             {
                 break;
             }
         }
     }
+    else if (fd > 2)
+    {
+        return file_read(thread_current()->fd[fd], buffer, size);
+    }
+
     return i;
 }
 
