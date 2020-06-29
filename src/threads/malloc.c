@@ -169,7 +169,11 @@ calloc (size_t a, size_t b)
   /* Allocate and zero memory. */
   p = malloc (size);
   if (p != NULL)
-    memset (p, 0, size);
+  {
+      printf("Success malloc\n");
+      memset(p, 0, size);
+  }
+    
 
   return p;
 }
