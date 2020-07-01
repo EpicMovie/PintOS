@@ -118,7 +118,7 @@ int exec(const char* file)
 
     if (fp == NULL)
     {
-        thread_exit();
+        exit(-1);
         return -1;
     }
     else
