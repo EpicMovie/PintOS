@@ -139,8 +139,6 @@ process_wait (tid_t child_tid UNUSED)
 
       list_remove(&t->child_elem);
 
-      printf("exit : %d\n", t->tid);
-
       return t->exit_status;
     }
     else
@@ -169,11 +167,7 @@ process_exit (void)
       thread_unblock(parent);
 
       intr_set_level(old_level);
-
-      printf("thread_unblock\n", parent->tid);
   }
-
-  printf("thread_eixt %d\n", cur->tid);
 
   uint32_t *pd;
 
@@ -294,13 +288,9 @@ load (const char *file_name, void (**eip) (void), void **esp)
   bool success = false;
   int i;
 
-  printf("load 1 \n");
-
   char file_name_no_args[100];
   memset(file_name_no_args, 0, 100);
   get_file_name(file_name, file_name_no_args);
-
-  printf("load 2 \n");
 
   /* Allocate and activate page directory. */
   t->pagedir = pagedir_create ();
@@ -315,8 +305,6 @@ load (const char *file_name, void (**eip) (void), void **esp)
       printf ("load: %s: open failed\n", file_name_no_args);
       goto done; 
     }
-
-  printf("load 3 \n");
 
   /* Read and verify executable header. */
   if (file_read (file, &ehdr, sizeof ehdr) != sizeof ehdr
