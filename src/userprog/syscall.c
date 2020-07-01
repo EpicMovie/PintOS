@@ -128,7 +128,7 @@ int exec(const char* file)
 
 int wait(pid_t)
 {
-    process_wait();
+    return process_wait(pid_t);
 }
 
 bool create_file(const char* file, unsigned initial_size)
