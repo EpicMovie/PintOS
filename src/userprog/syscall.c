@@ -104,33 +104,19 @@ void exit(int status)
     ASSERT(thread_current());
     thread_current()->exit_status = status;
 
-    if (thread_current()->parent_thread != NULL)
-    {
-        printf("Parent Exist\n");
-    }
+    struct thread parent = thread_current()->parent_thread;
 
-    if (thread_current()->status == THREAD_BLOCKED)
-    {
-        printf("Blocked\n");
-    }
-
-    if (thread_current()->parent_thread != NULL && thread_current()->status == THREAD_BLOCKED)
+    if (parent != NULL && parent->status == THREAD_BLOCKED)
     {
         enum intr_level old_level;
 
         old_level = intr_disable();
 
-        thread_unblock(thread_current()->parent_thread);
+        thread_unblock(parent);
 
         intr_set_level(old_level);
+    }
 
-        printf("Unblock\n");
-    }
-    else
-    {
-        printf("Block\n");
-    }
-    
     printf("%s: exit(%d)\n", thread_name(), status);
 	thread_exit();
 }
