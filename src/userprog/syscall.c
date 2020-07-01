@@ -143,10 +143,12 @@ int open(const char* file)
     
     if (fp == NULL) 
     {
+        printf("file load failed\n");
         exit(-1);
     }
     else
     {
+        printf("unexpected\n");
         for (i = 3; i < 128; i++) {
             if (thread_current()->fd[i] == NULL) 
             {
