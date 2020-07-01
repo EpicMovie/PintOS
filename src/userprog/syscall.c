@@ -113,6 +113,8 @@ void exit(int status)
         thread_unblock(thread_current()->parent_thread);
 
         intr_set_level(old_level);
+
+        printf("Unblock\n");
     }
     
     printf("%s: exit(%d)\n", thread_name(), status);
