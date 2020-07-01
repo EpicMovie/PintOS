@@ -72,11 +72,8 @@ process_execute (const char *file_name)
     ASSERT(t != NULL);
 
     int index = t->num_child_process++;
-
-    realloc(t->child_tid, sizeof(int) * t->num_child_process);
-    printf("%d \n", t->num_child_process);
-    printf("%d \n", index);
-
+    ASSERT(t->num_child_process <= 128);
+    
     t->child_tid[index] = tid;
   }
     
@@ -148,7 +145,6 @@ process_wait (tid_t child_tid UNUSED)
   
   if(current_thread->num_child_process == 0)
   {
-    free(current_thread->child_tid);
     return -1;
   }
 

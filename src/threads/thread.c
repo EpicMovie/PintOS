@@ -517,7 +517,6 @@ init_thread (struct thread *t, const char *name, int priority)
       t->fd[i] = NULL;
   }
 
-  t->child_tid = NULL;
   t->num_child_process = 0;
 #endif
 
