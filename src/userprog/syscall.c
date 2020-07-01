@@ -107,8 +107,6 @@ void exit(int status)
 
     thread_current()->exit_status = status;
 
-    ASSERT(false);
-
 	thread_exit();
 }
 
