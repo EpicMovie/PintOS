@@ -529,6 +529,7 @@ init_thread (struct thread *t, const char *name, int priority)
   }
   else
   {
+    printf("None");
     t->parent_thread = NULL;
   }
   
