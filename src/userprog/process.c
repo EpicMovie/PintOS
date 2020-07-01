@@ -125,7 +125,6 @@ process_wait (tid_t child_tid UNUSED)
 
     if (t->tid == child_tid)
     {
-      printf("%d blocked \n", t->tid);
       enum intr_level old_level;
       old_level = intr_disable();
 
