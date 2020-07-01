@@ -151,11 +151,7 @@ int open(const char* file)
     int i;
     struct file* fp = filesys_open(file);
     
-    if (fp == NULL) 
-    {
-        exit(-1);
-    }
-    else
+    if (fp != NULL) 
     {
         for (i = 3; i < 128; i++) {
             if (thread_current()->fd[i] == NULL) 
