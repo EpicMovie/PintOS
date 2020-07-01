@@ -75,6 +75,7 @@ process_execute (const char *file_name)
 
     realloc(t->child_tid, sizeof(int) * t->num_child_process);
     printf("%d \n", t->num_child_process);
+    printf("%d \n", index);
 
     t->child_tid[index] = tid;
   }
