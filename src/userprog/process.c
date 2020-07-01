@@ -161,7 +161,11 @@ process_exit (void)
       thread_unblock(parent);
 
       intr_set_level(old_level);
+
+      printf("thread_unblock\n", parent->tid);
   }
+
+  printf("thread_eixt %d\n", cur->tid);
 
   uint32_t *pd;
 
