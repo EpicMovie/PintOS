@@ -152,8 +152,6 @@ process_exit (void)
 {
   struct thread *cur = thread_current ();
 
-  cur->exit_status = status;
-
   struct thread* parent = cur->parent_thread;
 
   if (parent != NULL && parent->status == THREAD_BLOCKED)
