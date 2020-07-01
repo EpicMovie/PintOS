@@ -116,6 +116,10 @@ void exit(int status)
 
         printf("Unblock\n");
     }
+    else
+    {
+        printf("Block\n");
+    }
     
     printf("%s: exit(%d)\n", thread_name(), status);
 	thread_exit();
