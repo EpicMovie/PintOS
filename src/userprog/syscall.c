@@ -143,7 +143,7 @@ int open(const char* file)
     
     if (fp == NULL) 
     {
-        return -1;
+        exit(-1);
     }
     else
     {
