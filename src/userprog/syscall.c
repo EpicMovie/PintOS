@@ -104,7 +104,7 @@ void exit(int status)
     ASSERT(thread_current());
     thread_current()->exit_status = status;
 
-    struct thread parent = thread_current()->parent_thread;
+    struct thread* parent = thread_current()->parent_thread;
 
     if (parent != NULL && parent->status == THREAD_BLOCKED)
     {
