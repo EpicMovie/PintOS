@@ -114,7 +114,17 @@ int exec(const char* file)
 {
     check_user_addr(file);
 
-    return process_execute(file);
+    struct file* fp = filesys_open(file);
+
+    if (fp == NULL)
+    {
+        thread_exit();
+        return -1;
+    }
+    else
+    {
+        return process_execute(file);
+    }
 }
 
 int wait(pid_t)
@@ -143,12 +153,10 @@ int open(const char* file)
     
     if (fp == NULL) 
     {
-        printf("file load failed\n");
         exit(-1);
     }
     else
     {
-        printf("unexpected\n");
         for (i = 3; i < 128; i++) {
             if (thread_current()->fd[i] == NULL) 
             {
