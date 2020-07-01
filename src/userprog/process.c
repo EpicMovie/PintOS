@@ -130,7 +130,9 @@ process_wait (tid_t child_tid UNUSED)
 
   bool found = false;
 
-  for (int i = 0; i < current_thread->num_child_process; i++)
+  int i;
+
+  for (i = 0; i < current_thread->num_child_process; i++)
   {
     if (current_thread->child_tid[i] == child_tid)
     {
