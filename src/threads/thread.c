@@ -524,12 +524,10 @@ init_thread (struct thread *t, const char *name, int priority)
 
   if (t != initial_thread)
   {
-    printf("init_parent_thread\n");
     t->parent_thread = running_thread();
   }
   else
   {
-    printf("None");
     t->parent_thread = NULL;
   }
   

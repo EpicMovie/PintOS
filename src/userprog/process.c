@@ -123,7 +123,6 @@ process_wait (tid_t child_tid UNUSED)
   {
     struct thread* t = list_entry(e, struct thread, child_elem);
 
-    printf("child tid : %d\n", child_tid);
     if (t->tid == child_tid)
     {
       enum intr_level old_level;
@@ -135,6 +134,10 @@ process_wait (tid_t child_tid UNUSED)
 
       list_remove(&t->child_elem);
       return t->exit_status;
+    }
+    else
+    {
+      e = list_next(e);
     }
   }
 
