@@ -2,9 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\filesys",
-    "\\src\\userprog"
+    "\\src\\tests",
+    "\\src\\tests\\userprog",
+    "\\src\\tests\\userprog\\lib",
+    "\\src\\tests\\userprog\\lib\\user",
+    "\\src\\tests\\userprog\\no-vm"
   ],
-  "SelectedNode": "\\src\\userprog\\syscall.h",
+  "SelectedNode": "\\src\\tests\\userprog\\read-bad-fd.c",
   "PreviewInSolutionExplorer": false
 }

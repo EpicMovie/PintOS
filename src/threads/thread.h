@@ -99,6 +99,9 @@ struct thread
     uint32_t *pagedir;                  /* Page directory. */
 
     struct file* fd[128];
+    int* child_tid;
+    int num_child_process;
+
 #endif
 
     /* Owned by thread.c. */

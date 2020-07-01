@@ -516,6 +516,9 @@ init_thread (struct thread *t, const char *name, int priority)
   {
       t->fd[i] = NULL;
   }
+
+  child_tid = NULL;
+  num_child_process = 0;
 #endif
 
   list_push_back (&all_list, &t->allelem);

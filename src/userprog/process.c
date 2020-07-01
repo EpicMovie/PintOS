@@ -63,7 +63,23 @@ process_execute (const char *file_name)
   // Make thread with filename without argument
   tid = thread_create (file_name_no_args, PRI_DEFAULT, start_process, fn_copy);
   if (tid == TID_ERROR)
-    palloc_free_page (fn_copy); 
+  {
+    palloc_free_page(fn_copy);
+  }
+  else
+  {
+    struct thread* t = thread_current();
+    ASSERT(t != NULL);
+
+    int index = t->num_child_process++;
+
+    if (_msize(t->chid_tid) < t->num_child_process)
+    {
+      realloc(t->child_tid, sizeof(int) * t->num_child_process);
+      t->child_tid[index] = tid;
+    }
+  }
+    
   return tid;
 }
 
@@ -110,17 +126,31 @@ start_process (void *file_name_)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
-  // Test code
-  int i;
-  int sum;
+  struct thread* current_thread = thread_current();
 
-  for (i = 0; i < 10000000; i++)
+  bool found = false;
+
+  for (int i = 0; i < current_thread->num_child_process; i++)
   {
-    sum += i;
+    if (current_thread->child_tid[i] == child_tid)
+    {
+      current_thread->child_tid[i] = NULL;
+      found = true;
+    }
   }
 
-  // Test before sys call implement
-  return -1 + sum;
+  if (found)
+  {
+    current_thread->num_child_process--;
+  }
+  
+  if(current_thread->num_child_process == 0)
+  {
+    free(current_thread->child_tid);
+    return -1;
+  }
+
+  return 0;
 }
 
 /* Free the current process's resources. */
