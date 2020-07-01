@@ -133,6 +133,9 @@ process_wait (tid_t child_tid UNUSED)
       intr_set_level(old_level);
 
       list_remove(&t->child_elem);
+
+      printf("exit : %d\n", t->tid);
+
       return t->exit_status;
     }
     else
