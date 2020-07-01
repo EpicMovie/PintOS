@@ -123,6 +123,8 @@ process_wait (tid_t child_tid UNUSED)
   {
     struct thread* t = list_entry(e, struct thread, child_elem);
 
+    printf("tid : %d\n", t->tid);
+
     if (t->tid == child_tid)
     {
       enum intr_level old_level;
