@@ -113,19 +113,7 @@ void exit(int status)
 int exec(const char* file)
 {
     check_user_addr(file);
-    /*
-    struct file* fp = filesys_open(file);
-
-    if (fp == NULL)
-    {
-        exit(-1);
-        return -1;
-    }
-    else
-    {
-        
-    }
-    */
+    
     return process_execute(file);
 }
 
