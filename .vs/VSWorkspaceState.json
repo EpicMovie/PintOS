@@ -2,12 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\tests",
-    "\\src\\tests\\userprog",
-    "\\src\\tests\\userprog\\lib",
+    "\\src\\devices",
+    "\\src\\lib",
+    "\\src\\lib\\kernel",
+    "\\src\\lib\\user",
+    "\\src\\tests\\threads",
     "\\src\\tests\\userprog\\lib\\user",
-    "\\src\\tests\\userprog\\no-vm"
+    "\\src\\tests\\userprog\\no-vm",
+    "\\src\\threads"
   ],
-  "SelectedNode": "\\src\\tests\\userprog\\read-bad-fd.c",
+  "SelectedNode": "\\src\\threads\\Make.vars",
   "PreviewInSolutionExplorer": false
 }

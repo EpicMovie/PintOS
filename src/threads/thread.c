@@ -517,7 +517,10 @@ init_thread (struct thread *t, const char *name, int priority)
       t->fd[i] = NULL;
   }
 
-  t->num_child_process = 0;
+  list_push_back(&running_thread()->child_list, &t->child_elem);
+
+  t->exit_status = 0;
+  t->parent_thread = running_thread();
 #endif
 
   list_push_back (&all_list, &t->allelem);

@@ -66,16 +66,6 @@ process_execute (const char *file_name)
   {
     palloc_free_page(fn_copy);
   }
-  else
-  {
-    struct thread* t = thread_current();
-    ASSERT(t != NULL);
-
-    int index = t->num_child_process++;
-    ASSERT(t->num_child_process <= 128);
-    
-    t->child_tid[index] = tid;
-  }
     
   return tid;
 }
@@ -125,30 +115,29 @@ process_wait (tid_t child_tid UNUSED)
 {
   struct thread* current_thread = thread_current();
 
-  bool found = false;
+  struct list_elem* e;
 
-  int i;
+  e = list_begin(&current_thread->child_list);
 
-  for (i = 0; i < current_thread->num_child_process; i++)
+  while (e != list_end(&current_thread->child_list))
   {
-    if (current_thread->child_tid[i] == child_tid)
+    struct thread* t = list_entry(e, struct thread, child_elem);
+
+    if (t->tid != child_tid)
     {
-      current_thread->child_tid[i] = NULL;
-      found = true;
+      enum intr_level old_level;
+      old_level = intr_disable();
+
+      thread_block();
+
+      intr_set_level(old_level);
+
+      list_remove(&t->child_elem);
+      return t->exit_status;
     }
   }
 
-  if (found)
-  {
-    current_thread->num_child_process--;
-  }
-  
-  if(current_thread->num_child_process == 0)
-  {
-    return -1;
-  }
-
-  return 0;
+  return -1;
 }
 
 /* Free the current process's resources. */

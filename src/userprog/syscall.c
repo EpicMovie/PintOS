@@ -101,6 +101,20 @@ void halt(void)
 
 void exit(int status)
 {
+    ASSERT(thread_current());
+    thread_current()->exit_status = status;
+
+    if (thread_current()->parent_thread != NULL && thread_current()->status == THREAD_BLOCKED)
+    {
+        enum intr_level old_level;
+
+        old_level = intr_disable();
+
+        thread_unblock(thread_current()->parent_thread);
+
+        intr_set_level(old_level);
+    }
+    
     printf("%s: exit(%d)\n", thread_name(), status);
 	thread_exit();
 }
