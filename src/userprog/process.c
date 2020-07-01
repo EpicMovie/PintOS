@@ -123,7 +123,7 @@ process_wait (tid_t child_tid UNUSED)
   {
     struct thread* t = list_entry(e, struct thread, child_elem);
 
-    if (t->tid != child_tid)
+    if (t->tid == child_tid)
     {
       enum intr_level old_level;
       old_level = intr_disable();
