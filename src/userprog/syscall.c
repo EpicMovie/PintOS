@@ -104,6 +104,16 @@ void exit(int status)
     ASSERT(thread_current());
     thread_current()->exit_status = status;
 
+    if (thread_current()->parent_thread != NULL)
+    {
+        printf("Parent Exist\n");
+    }
+
+    if (thread_current()->status == THREAD_BLOCKED)
+    {
+        printf("Blocked\n");
+    }
+
     if (thread_current()->parent_thread != NULL && thread_current()->status == THREAD_BLOCKED)
     {
         enum intr_level old_level;
