@@ -136,7 +136,9 @@ bool create_file(const char* file, unsigned initial_size)
 
 bool remove(const char* file)
 {
+    check_user_addr(file);
 
+    return filesys_remove(file);
 }
 
 int open(const char* file)
