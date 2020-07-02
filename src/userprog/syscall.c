@@ -87,7 +87,8 @@ syscall_handler (struct intr_frame *f UNUSED)
         // tell();
         break;
     case SYS_CLOSE:
-        // close();
+        check_user_addr(f->esp + WORD_SIZE);
+        close((int)*(uint32_t*)(f->esp + WORD_SIZE));
         break;
     default:
         break;
@@ -220,6 +221,15 @@ unsigned tell(int fd)
 
 void close(int fd)
 {
+	if(fd < 0 || fd >= 128)
+	{
+		return;
+	}
 
+	if(thread_current()->fd[fd] != NULL)
+	{
+		file_close(thread_current()->fd[fd]);
+		thread_current()->fd[fd] = NULL;
+	}
 }
 
