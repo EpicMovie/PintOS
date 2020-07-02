@@ -530,6 +530,8 @@ init_thread (struct thread *t, const char *name, int priority)
   {
     t->parent_thread = NULL;
   }
+
+  t->exec_file = NULL;
   
 #endif
 

@@ -65,6 +65,7 @@ process_execute (const char *file_name)
       return -1;
   }
 
+  thread_current()->exec_file = exec_file;
   file_deny_write(exec_file);
   /* Create a new thread to execute FILE_NAME. */
   // Make thread with filename without argument
@@ -169,6 +170,22 @@ process_exit (void)
       thread_unblock(parent);
 
       intr_set_level(old_level);
+  }
+
+  int i;
+
+  for(i = 0; i < 128; i++)
+  {
+    if(cur->fd[i] != NULL)
+    {
+      file_close(cur->fd[i]);
+    }
+  }
+
+  if(parent != NULL)
+  {
+    file_allow_write(parent->exec_file);
+    parent->exec_file = NULL;
   }
 
   uint32_t *pd;

@@ -105,6 +105,7 @@ struct thread
     struct list child_list;
 
     struct thread* parent_thread;
+    struct file* exec_file;
 #endif
 
     /* Owned by thread.c. */
