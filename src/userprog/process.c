@@ -59,11 +59,13 @@ process_execute (const char *file_name)
   memset(file_name_no_args, 0, 100);
   get_file_name(file_name, file_name_no_args);
 
-  if (filesys_open(file_name_no_args) == NULL)
+  struct file* exec_file = filesys_open(file_name_no_args);
+  if(exec_file == NULL)
   {
       return -1;
   }
 
+  file_deny_write(exec_file);
   /* Create a new thread to execute FILE_NAME. */
   // Make thread with filename without argument
   tid = thread_create (file_name_no_args, PRI_DEFAULT, start_process, fn_copy);
