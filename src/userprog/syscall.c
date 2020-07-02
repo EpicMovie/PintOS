@@ -11,6 +11,7 @@
 static void syscall_handler (struct intr_frame *);
 
 bool create_file(const char*, unsigned);
+unsigned tell_file(int);
 
 void check_user_addr(void* addr)
 {
@@ -81,11 +82,14 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = write((int)*(uint32_t*)(f->esp + WORD_SIZE), (void*)*(uint32_t*)(f->esp + WORD_SIZE * 2), (unsigned)*((uint32_t*)(f->esp + WORD_SIZE * 3)));
         break;
     case SYS_SEEK:
-        // seek();
+        check_user_addr(f->esp + WORD_SIZE);
+	check_user_addr(f->esp + WORD_SIZE * 2);
+        seek((int)*(uint32_t*)(f->esp + WORD_SIZE), (unsigned)*((uint32_t*)(f->esp + WORD_SIZE * 2)));
         break;
     case SYS_TELL:
-        // tell();
-        break;
+        check_user_addr(f->esp + WORD_SIZE);
+        tell_file((int)*(uint32_t*)(f->esp + WORD_SIZE)); 
+	break;
     case SYS_CLOSE:
         check_user_addr(f->esp + WORD_SIZE);
         close((int)*(uint32_t*)(f->esp + WORD_SIZE));
@@ -158,7 +162,17 @@ int open(const char* file)
 
 int filesize(int fd)
 {
-    return file_length(thread_current()->fd[fd]);
+        if(fd < 0 || fd >= 128)
+        {
+                return 0;
+        }
+
+        if(thread_current()->fd[fd] != NULL)
+        {
+		return file_length(thread_current()->fd[fd]);
+        }
+
+	return 0;
 }
 
 int read(int fd, void* buffer, unsigned size)
@@ -211,12 +225,28 @@ int write(int fd, const void* buffer, unsigned size)
 
 void seek(int fd, unsigned position)
 {
+        if(fd < 0 || fd >= 128)
+        {
+                return;
+        }
 
+        if(thread_current()->fd[fd] != NULL)
+        {
+                file_seek(thread_current()->fd[fd], position);
+        }
 }
 
-unsigned tell(int fd)
+unsigned tell_file(int fd)
 {
+        if(fd < 0 || fd >= 128)
+        {
+                return;
+        }
 
+        if(thread_current()->fd[fd] != NULL)
+        {
+                file_tell(thread_current()->fd[fd]);
+        }
 }
 
 void close(int fd)
